@@ -1,0 +1,51 @@
+{
+  "timestamp": "2025-07-21T21:29:00.818204",
+  "report_type": "Scalability Analysis",
+  "summary": {
+    "scaling_factor": "Dataset size vs Performance",
+    "memory_scaling": "Linear with dataset size",
+    "training_scaling": "Sub-linear with dataset size"
+  },
+  "detailed_results": {
+    "5_texts": {
+      "dataset_size": 5,
+      "training_time": 0.7428808212280273,
+      "memory_used_mb": 0.0,
+      "patterns_extracted": 100,
+      "generation_time": 0.0006337165832519531,
+      "response_length": 9
+    },
+    "10_texts": {
+      "dataset_size": 10,
+      "training_time": 1.0055980682373047,
+      "memory_used_mb": 0.0,
+      "patterns_extracted": 112,
+      "generation_time": 0.002267122268676758,
+      "response_length": 25
+    },
+    "20_texts": {
+      "dataset_size": 20,
+      "training_time": 1.5601990222930908,
+      "memory_used_mb": 0.00390625,
+      "patterns_extracted": 112,
+      "generation_time": 0.002628326416015625,
+      "response_length": 25
+    },
+    "40_texts": {
+      "dataset_size": 40,
+      "training_time": 1.5656027793884277,
+      "memory_used_mb": 0.00390625,
+      "patterns_extracted": 112,
+      "generation_time": 0.003451824188232422,
+      "response_length": 25
+    },
+    "80_texts": {
+      "dataset_size": 80,
+      "training_time": 1.5956690311431885,
+      "memory_used_mb": 0.0,
+      "patterns_extracted": 112,
+      "generation_time": 0.004012107849121094,
+      "response_length": 25
+    }
+  }
+}

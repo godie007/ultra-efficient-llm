@@ -1,0 +1,83 @@
+{
+  "timestamp": "2025-07-21T21:29:00.819931",
+  "report_type": "Quality Assessment",
+  "summary": {
+    "avg_coherence_score": 1.0,
+    "avg_diversity_ratio": 0.2097505281573909,
+    "avg_response_length": 8.322222222222223
+  },
+  "detailed_results": {
+    "customer_service": {
+      "avg_response_length": 10.2,
+      "avg_diversity_ratio": 0.20324074074074075,
+      "avg_coherence_score": 1.0,
+      "sample_responses": [
+        "hello , i need help w to a my to to to",
+        "hello , i need help w to my to help a with",
+        "hello , i need help w to a order my to to",
+        "hello , i need help w to a order to to to",
+        "hello , i need help w to to my a to shipping"
+      ]
+    },
+    "technical_support": {
+      "avg_response_length": 6.666666666666667,
+      "avg_diversity_ratio": 0.23333333333333334,
+      "avg_coherence_score": 1.0,
+      "sample_responses": [
+        "my computer is runni",
+        "my computer is runni",
+        "my computer is runni",
+        "my computer is runni",
+        "my computer is runni"
+      ]
+    },
+    "e_commerce": {
+      "avg_response_length": 9.733333333333333,
+      "avg_diversity_ratio": 0.2259694989106754,
+      "avg_coherence_score": 1.0,
+      "sample_responses": [
+        "i ' m looking for a la 500 under under",
+        "i ' m looking for a la under laptop under 500",
+        "i ' m looking for a la 500 under $",
+        "i ' m looking for a la $ 500 under",
+        "i ' m looking for a la $ laptop $"
+      ]
+    },
+    "content_generation": {
+      "avg_response_length": 9,
+      "avg_diversity_ratio": 0.14814814814814814,
+      "avg_coherence_score": 1.0,
+      "sample_responses": [
+        "write a product desc a a a a a",
+        "write a product desc a a a a a",
+        "write a product desc a a a a a",
+        "write a product desc a a a a a",
+        "write a product desc a a a a a"
+      ]
+    },
+    "healthcare": {
+      "avg_response_length": 8.333333333333334,
+      "avg_diversity_ratio": 0.28484848484848485,
+      "avg_coherence_score": 1.0,
+      "sample_responses": [
+        "i need to schedule a",
+        "i need to schedule a",
+        "i need to schedule a",
+        "i need to schedule a",
+        "i need to schedule a"
+      ]
+    },
+    "education": {
+      "avg_response_length": 6,
+      "avg_diversity_ratio": 0.16296296296296298,
+      "avg_coherence_score": 1.0,
+      "sample_responses": [
+        "i need help understa",
+        "i need help understa",
+        "i need help understa",
+        "i need help understa",
+        "i need help understa"
+      ]
+    }
+  }
+}

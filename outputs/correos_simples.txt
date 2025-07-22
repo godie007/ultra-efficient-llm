@@ -1,0 +1,179 @@
+================================================================================
+CORREOS ELECTRÓNICOS GENERADOS POR ULTRAEFFICIENTLLM
+================================================================================
+
+📝 CONTEXTO: Contexto_1
+============================================================
+
+🎯 TONO: FORMAL
+----------------------------------------
+Asunto: Re: Solicitar una reunión para dis...
+
+Estimado/a María García, agradezco su tiempo. Quisiera solicitar una reunión para discutir Solicitar una reunión para discutir el proyecto de marketing digital. Propongo reunirnos el martes a las 1:00 PM. Por favor, confirme si este horario le resulta conveniente. Atentamente, Carlos Rodríguez
+
+
+
+----------------------------------------
+
+🎯 TONO: BUSINESS
+----------------------------------------
+Asunto: Re: Solicitar una reunión para dis...
+
+Estimado/a María García, agradezco su tiempo. Quisiera solicitar una reunión para discutir Solicitar una reunión para discutir el proyecto de marketing digital. Propongo reunirnos el jueves a las 4:00 PM. Por favor, confirme si este horario le resulta conveniente. Atentamente, Carlos Rodríguez
+
+
+
+----------------------------------------
+
+🎯 TONO: CASUAL
+----------------------------------------
+Asunto: Re: Solicitar una reunión para dis...
+
+Estimado/a María García, me pongo en contacto con usted para coordinar una reunión sobre Solicitar una reunión para discutir el proyecto de marketing digital. ¿Podría estar disponible el miércoles a las 1:00 PM? Si este horario no le conviene, por favor hágame saber sus alternativas. Atentamente, Carlos Rodríguez
+
+
+
+----------------------------------------
+
+================================================================================
+
+📝 CONTEXTO: Contexto_2
+============================================================
+
+🎯 TONO: FORMAL
+----------------------------------------
+Asunto: Re: Agradecer por la entrevista de...
+
+Estimado/a María García, quería tomar un momento para agradecerle por Agradecer por la entrevista de trabajo realizada ayer en la empresa TechCorp. Su apoyo ha sido clave.. Su colaboración significa mucho para mí. Atentamente, Carlos Rodríguez
+
+
+
+----------------------------------------
+
+🎯 TONO: BUSINESS
+----------------------------------------
+Asunto: Re: Agradecer por la entrevista de...
+
+Estimado/a María García, quería tomar un momento para agradecerle por Agradecer por la entrevista de trabajo realizada ayer en la empresa TechCorp. Su apoyo ha sido clave.. Su colaboración significa mucho para mí. Atentamente, Carlos Rodríguez
+
+
+
+----------------------------------------
+
+🎯 TONO: CASUAL
+----------------------------------------
+Asunto: Re: Agradecer por la entrevista de...
+
+Estimado/a María García, muchas gracias por su apoyo. Realmente aprecio Agradecer por la entrevista de trabajo realizada ayer en la empresa TechCorp. Su contribución ha sido fundamental.. Espero poder trabajar juntos nuevamente. Atentamente, Carlos Rodríguez
+
+
+
+----------------------------------------
+
+================================================================================
+
+📝 CONTEXTO: Contexto_3
+============================================================
+
+🎯 TONO: FORMAL
+----------------------------------------
+Asunto: Re: Seguimiento sobre la propuesta...
+
+Estimado/a María García, espero que este correo le encuentre bien. Quería hacer seguimiento sobre Seguimiento sobre la propuesta de servicios enviada la semana pasada que discutimos hace unos días. Necesito una actualización sobre el progreso.. ¿Podría proporcionarme una actualización? Atentamente, Carlos Rodríguez
+
+
+
+----------------------------------------
+
+🎯 TONO: BUSINESS
+----------------------------------------
+Asunto: Re: Seguimiento sobre la propuesta...
+
+Estimado/a María García, me pongo en contacto con usted para hacer seguimiento sobre Seguimiento sobre la propuesta de servicios enviada la semana pasada. Necesito recordarle sobre este asunto importante.. Agradecería su respuesta para continuar con el plan establecido. Atentamente, Carlos Rodríguez
+
+
+
+----------------------------------------
+
+🎯 TONO: CASUAL
+----------------------------------------
+Asunto: Re: Seguimiento sobre la propuesta...
+
+Estimado/a María García, me pongo en contacto con usted para hacer seguimiento sobre Seguimiento sobre la propuesta de servicios enviada la semana pasada. Necesito recordarle sobre este asunto importante.. Agradecería su respuesta para continuar con nuestros objetivos. Atentamente, Carlos Rodríguez
+
+
+
+----------------------------------------
+
+================================================================================
+
+📝 CONTEXTO: Contexto_4
+============================================================
+
+🎯 TONO: FORMAL
+----------------------------------------
+Asunto: Re: Informar sobre el retraso en l...
+
+Estimado/a María García, le escribo para presentarle una propuesta de propuesta. Esta propuesta ofrece múltiples beneficios para su organización.. ¿Podríamos agendar una reunión para discutir los detalles? Atentamente, Carlos Rodríguez
+
+
+
+----------------------------------------
+
+🎯 TONO: BUSINESS
+----------------------------------------
+Asunto: Re: Informar sobre el retraso en l...
+
+Estimado/a María García, le escribo para presentarle una propuesta de servicio. Esta propuesta ofrece múltiples beneficios para su organización.. ¿Podríamos agendar una reunión para discutir los detalles? Atentamente, Carlos Rodríguez
+
+
+
+----------------------------------------
+
+🎯 TONO: CASUAL
+----------------------------------------
+Asunto: Re: Informar sobre el retraso en l...
+
+Estimado/a María García, espero que este mensaje le encuentre bien. Me pongo en contacto con usted para presentarle Informar sobre el retraso en la entrega del producto debido a problemas de logística. Esta propuesta incluye todos los detalles necesarios para su consideración.. Me gustaría discutir esta oportunidad más a fondo. Atentamente, Carlos Rodríguez
+
+
+
+----------------------------------------
+
+================================================================================
+
+📝 CONTEXTO: Contexto_5
+============================================================
+
+🎯 TONO: FORMAL
+----------------------------------------
+Asunto: Re: Invitar a un evento de network...
+
+Estimado/a María García, me pongo en contacto con usted respecto a Invitar a un evento de networking que se realizará el próximo mes. Este asunto requiere su atención y consideración.. Agradecería su opinión sobre este asunto. Atentamente, Carlos Rodríguez
+
+
+
+----------------------------------------
+
+🎯 TONO: BUSINESS
+----------------------------------------
+Asunto: Re: Invitar a un evento de network...
+
+Estimado/a María García, agradezco su tiempo. Le escribo para Invitar a un evento de networking que se realizará el próximo mes. Toda la información relevante se encuentra en los documentos adjuntos.. Estoy disponible para cualquier consulta. Atentamente, Carlos Rodríguez
+
+
+
+----------------------------------------
+
+🎯 TONO: CASUAL
+----------------------------------------
+Asunto: Re: Invitar a un evento de network...
+
+Estimado/a María García, me pongo en contacto con usted respecto a Invitar a un evento de networking que se realizará el próximo mes. Este asunto requiere su atención y consideración.. Agradecería su opinión sobre este asunto. Atentamente, Carlos Rodríguez
+
+
+
+----------------------------------------
+
+================================================================================
+

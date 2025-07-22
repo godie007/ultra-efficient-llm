@@ -19,7 +19,7 @@ setup(
     name="ultra-efficient-llm",
     version="1.0.0",
     author="UltraEfficientLLM Team",
-    author_email="team@ultra-efficient-llm.com",
+    author_email="diegof.e3@gmail.com",
     description="Modelo de lenguaje ultra-eficiente basado en patrones selectivos",
     long_description=read_readme(),
     long_description_content_type="text/markdown",

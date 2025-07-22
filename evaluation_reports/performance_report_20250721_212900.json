@@ -1,0 +1,132 @@
+{
+  "timestamp": "2025-07-21T21:29:00.817046",
+  "report_type": "Performance Benchmark",
+  "summary": {
+    "total_datasets": 6,
+    "avg_training_time": 1.040341854095459,
+    "avg_memory_usage": 0.2669270833333333,
+    "avg_generation_speed": 4486.105751406744
+  },
+  "detailed_results": {
+    "customer_service": {
+      "training_time": 1.0383751392364502,
+      "memory_used_mb": 1.484375,
+      "patterns_extracted": 391,
+      "avg_generation_time": 0.0015900135040283203,
+      "max_generation_time": 0.0032532215118408203,
+      "min_generation_time": 0.0003306865692138672,
+      "avg_generation_speed": 4431.143555794395,
+      "max_generation_speed": 5221.341964396863,
+      "avg_response_length": 8,
+      "efficiency_report": {
+        "memory_kb": 488.3603515625,
+        "memory_improvement_vs_traditional": "30060x",
+        "patterns_stored": 391,
+        "sparsity_achieved": "99.3%",
+        "cache_hit_rate": "0.0%",
+        "activation_efficiency": "99.3%",
+        "average_activations_per_gen": "2.80"
+      }
+    },
+    "technical_support": {
+      "training_time": 1.0439419746398926,
+      "memory_used_mb": 0.08203125,
+      "patterns_extracted": 432,
+      "avg_generation_time": 0.0006577014923095703,
+      "max_generation_time": 0.0017614364624023438,
+      "min_generation_time": 0.000347137451171875,
+      "avg_generation_speed": 4335.436924742826,
+      "max_generation_speed": 5677.184623714131,
+      "avg_response_length": 5.2,
+      "efficiency_report": {
+        "memory_kb": 566.4501953125,
+        "memory_improvement_vs_traditional": "25916x",
+        "patterns_stored": 432,
+        "sparsity_achieved": "99.9%",
+        "cache_hit_rate": "0.0%",
+        "activation_efficiency": "99.9%",
+        "average_activations_per_gen": "0.60"
+      }
+    },
+    "e_commerce": {
+      "training_time": 1.0639023780822754,
+      "memory_used_mb": 0.02734375,
+      "patterns_extracted": 427,
+      "avg_generation_time": 0.0036699771881103516,
+      "max_generation_time": 0.0057830810546875,
+      "min_generation_time": 0.0016589164733886719,
+      "avg_generation_speed": 3780.1828432881016,
+      "max_generation_speed": 6028.031043403277,
+      "avg_response_length": 12.2,
+      "efficiency_report": {
+        "memory_kb": 577.49609375,
+        "memory_improvement_vs_traditional": "25420x",
+        "patterns_stored": 427,
+        "sparsity_achieved": "98.4%",
+        "cache_hit_rate": "0.0%",
+        "activation_efficiency": "98.4%",
+        "average_activations_per_gen": "6.80"
+      }
+    },
+    "content_generation": {
+      "training_time": 1.0330276489257812,
+      "memory_used_mb": 0.00390625,
+      "patterns_extracted": 370,
+      "avg_generation_time": 0.0024549007415771485,
+      "max_generation_time": 0.0026361942291259766,
+      "min_generation_time": 0.0021042823791503906,
+      "avg_generation_speed": 3691.037171322346,
+      "max_generation_speed": 4276.992522093814,
+      "avg_response_length": 9,
+      "efficiency_report": {
+        "memory_kb": 485.2705078125,
+        "memory_improvement_vs_traditional": "30251x",
+        "patterns_stored": 370,
+        "sparsity_achieved": "98.7%",
+        "cache_hit_rate": "0.0%",
+        "activation_efficiency": "98.7%",
+        "average_activations_per_gen": "4.80"
+      }
+    },
+    "healthcare": {
+      "training_time": 1.0377345085144043,
+      "memory_used_mb": 0.0,
+      "patterns_extracted": 302,
+      "avg_generation_time": 0.0014154434204101563,
+      "max_generation_time": 0.0020515918731689453,
+      "min_generation_time": 0.00030422210693359375,
+      "avg_generation_speed": 5465.105950762659,
+      "max_generation_speed": 7586.16077170418,
+      "avg_response_length": 8.2,
+      "efficiency_report": {
+        "memory_kb": 282.451171875,
+        "memory_improvement_vs_traditional": "51974x",
+        "patterns_stored": 302,
+        "sparsity_achieved": "98.9%",
+        "cache_hit_rate": "0.0%",
+        "activation_efficiency": "98.9%",
+        "average_activations_per_gen": "3.40"
+      }
+    },
+    "education": {
+      "training_time": 1.0250694751739502,
+      "memory_used_mb": 0.00390625,
+      "patterns_extracted": 267,
+      "avg_generation_time": 0.000777292251586914,
+      "max_generation_time": 0.0018918514251708984,
+      "min_generation_time": 0.0002498626708984375,
+      "avg_generation_speed": 5213.728062530137,
+      "max_generation_speed": 7311.395700174317,
+      "avg_response_length": 6.4,
+      "efficiency_report": {
+        "memory_kb": 257.8466796875,
+        "memory_improvement_vs_traditional": "56933x",
+        "patterns_stored": 267,
+        "sparsity_achieved": "99.4%",
+        "cache_hit_rate": "0.0%",
+        "activation_efficiency": "99.4%",
+        "average_activations_per_gen": "1.60"
+      }
+    }
+  }
+}

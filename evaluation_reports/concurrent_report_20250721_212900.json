@@ -1,0 +1,46 @@
+{
+  "timestamp": "2025-07-21T21:29:00.818847",
+  "report_type": "Concurrent Processing Analysis",
+  "summary": {
+    "max_threads_tested": 16,
+    "avg_success_rate": 1.0,
+    "scaling_efficiency": "Good up to 8 concurrent models"
+  },
+  "detailed_results": {
+    "1_threads": {
+      "num_threads": 1,
+      "total_time": 0.7588975429534912,
+      "avg_time_per_thread": 0.7588975429534912,
+      "successful_generations": 1,
+      "success_rate": 1.0
+    },
+    "2_threads": {
+      "num_threads": 2,
+      "total_time": 1.0284485816955566,
+      "avg_time_per_thread": 0.5142242908477783,
+      "successful_generations": 2,
+      "success_rate": 1.0
+    },
+    "4_threads": {
+      "num_threads": 4,
+      "total_time": 1.592318058013916,
+      "avg_time_per_thread": 0.398079514503479,
+      "successful_generations": 4,
+      "success_rate": 1.0
+    },
+    "8_threads": {
+      "num_threads": 8,
+      "total_time": 3.0133163928985596,
+      "avg_time_per_thread": 0.37666454911231995,
+      "successful_generations": 8,
+      "success_rate": 1.0
+    },
+    "16_threads": {
+      "num_threads": 16,
+      "total_time": 6.093860864639282,
+      "avg_time_per_thread": 0.38086630403995514,
+      "successful_generations": 16,
+      "success_rate": 1.0
+    }
+  }
+}

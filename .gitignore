@@ -1,107 +1,26 @@
-# Byte-compiled / optimized / DLL files
+# ===========================================
+# UltraEfficientLLM - Git Ignore Optimizado
+# ===========================================
+
+# ===========================================
+# PYTHON - Archivos de Python
+# ===========================================
 __pycache__/
 *.py[cod]
 *$py.class
-
-# C extensions
 *.so
-
-# Distribution / packaging
-.Python
-build/
-develop-eggs/
+*.egg
+*.egg-info/
 dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-pip-wheel-metadata/
-share/python-wheels/
+build/
 *.egg-info/
 .installed.cfg
 *.egg
 MANIFEST
 
-# PyInstaller
-#  Usually these files are written by a python script from a template
-#  before PyInstaller builds the exe, so as to inject date/other infos into it.
-*.manifest
-*.spec
-
-# Installer logs
-pip-log.txt
-pip-delete-this-directory.txt
-
-# Unit test / coverage reports
-htmlcov/
-.tox/
-.nox/
-.coverage
-.coverage.*
-.cache
-nosetests.xml
-coverage.xml
-*.cover
-*.py,cover
-.hypothesis/
-.pytest_cache/
-
-# Translations
-*.mo
-*.pot
-
-# Django stuff:
-*.log
-local_settings.py
-db.sqlite3
-db.sqlite3-journal
-
-# Flask stuff:
-instance/
-.webassets-cache
-
-# Scrapy stuff:
-.scrapy
-
-# Sphinx documentation
-docs/_build/
-
-# PyBuilder
-target/
-
-# Jupyter Notebook
-.ipynb_checkpoints
-
-# IPython
-profile_default/
-ipython_config.py
-
-# pyenv
-.python-version
-
-# pipenv
-#   According to pypa/pipenv#598, it is recommended to include Pipfile.lock in version control.
-#   However, in case of collaboration, if having platform-specific dependencies or dependencies
-#   having no cross-platform support, pipenv may install dependencies that don't work, or not
-#   install all needed dependencies.
-#Pipfile.lock
-
-# PEP 582; used by e.g. github.com/David-OConnor/pyflow
-__pypackages__/
-
-# Celery stuff
-celerybeat-schedule
-celerybeat.pid
-
-# SageMath parsed files
-*.sage.py
-
-# Environments
+# ===========================================
+# ENTORNOS VIRTUALES
+# ===========================================
 .env
 .venv
 env/
@@ -109,46 +28,217 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+.venv/
+.python-version
 
-# Spyder project settings
-.spyderproject
-.spyproject
+# ===========================================
+# PAQUETES Y DEPENDENCIAS
+# ===========================================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+.npm
+.yarn-integrity
 
-# Rope project settings
-.ropeproject
-
-# mkdocs documentation
-/site
-
-# mypy
-.mypy_cache/
-.dmypy.json
-dmypy.json
-
-# Pyre type checker
-.pyre/
-
-# Project specific
+# ===========================================
+# MODELOS Y DATOS DE ENTRENAMIENTO
+# ===========================================
 models/*.pkl
 models/*.pth
 models/*.h5
+models/*.bin
+models/*.safetensors
+models/trained_models/
+models/checkpoints/
 data/books/*.txt
-*.log
-.DS_Store
-Thumbs.db
+data/books/*.pdf
+data/books/*.epub
+data/processed/
+data/cache/
+data/temp/
 
-# IDE
+# ===========================================
+# LOGS Y ARCHIVOS TEMPORALES
+# ===========================================
+*.log
+logs/
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+.cache/
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+.hypothesis/
+
+# ===========================================
+# IDE Y EDITORES
+# ===========================================
 .vscode/
 .idea/
 *.swp
 *.swo
 *~
+.spyderproject
+.spyproject
+.ropeproject
 
-# OS
+# ===========================================
+# SISTEMAS OPERATIVOS
+# ===========================================
 .DS_Store
 .DS_Store?
 ._*
 .Spotlight-V100
 .Trashes
 ehthumbs.db
-Thumbs.db 
+Thumbs.db
+desktop.ini
+
+# ===========================================
+# FRONTEND - React/Vite
+# ===========================================
+web_app/frontend/dist/
+web_app/frontend/.vite/
+web_app/frontend/coverage/
+web_app/frontend/.nyc_output/
+web_app/frontend/.env.local
+web_app/frontend/.env.development.local
+web_app/frontend/.env.test.local
+web_app/frontend/.env.production.local
+
+# ===========================================
+# BACKEND - FastAPI
+# ===========================================
+web_app/backend/__pycache__/
+web_app/backend/*.pyc
+web_app/backend/.env
+web_app/backend/logs/
+web_app/backend/temp/
+web_app/backend/uploads/
+web_app/backend/models/
+
+# ===========================================
+# DATABASES Y ARCHIVOS DE CONFIGURACIÓN
+# ===========================================
+*.db
+*.sqlite
+*.sqlite3
+db.sqlite3
+db.sqlite3-journal
+instance/
+.webassets-cache
+
+# ===========================================
+# DOCUMENTACIÓN Y BUILD
+# ===========================================
+docs/_build/
+/site
+target/
+docs/build/
+
+# ===========================================
+# TESTING Y COBERTURA
+# ===========================================
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+.hypothesis/
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pyre/
+
+# ===========================================
+# ARCHIVOS DE DESARROLLO
+# ===========================================
+*.manifest
+*.spec
+pip-log.txt
+pip-delete-this-directory.txt
+celerybeat-schedule
+celerybeat.pid
+*.sage.py
+
+# ===========================================
+# ARCHIVOS DE JUPYTER
+# ===========================================
+.ipynb_checkpoints
+profile_default/
+ipython_config.py
+
+# ===========================================
+# ARCHIVOS DE PIP
+# ===========================================
+Pipfile.lock
+__pypackages__/
+
+# ===========================================
+# ARCHIVOS ESPECÍFICOS DEL PROYECTO
+# ===========================================
+# Modelos entrenados (pueden ser muy grandes)
+*.model
+*.weights
+*.checkpoint
+
+# Archivos de configuración local
+config.local.json
+settings.local.py
+
+# Archivos de respaldo
+*.bak
+*.backup
+*.old
+
+# Archivos de datos temporales
+temp_data/
+cache/
+tmp/
+
+# ===========================================
+# ARCHIVOS DE SEGURIDAD
+# ===========================================
+# Nunca subir claves API o secretos
+*.key
+*.pem
+*.p12
+*.pfx
+secrets.json
+.env.local
+.env.production
+.env.staging
+
+# ===========================================
+# ARCHIVOS DE DEPLOYMENT
+# ===========================================
+# Archivos específicos de deployment
+deploy/
+docker-compose.override.yml
+.dockerignore
+
+# ===========================================
+# ARCHIVOS DE MONITOREO
+# ===========================================
+# Logs de aplicación
+app.log
+error.log
+access.log
+*.log.*
+
+# ===========================================
+# ARCHIVOS DE DESARROLLO LOCAL
+# ===========================================
+# Archivos que solo existen en desarrollo local
+local_settings.py
+development.py
+test_settings.py 

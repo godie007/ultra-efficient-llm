@@ -1,0 +1,97 @@
+{
+  "dataset_name": "UltraEfficientLLM Training Data",
+  "version": "1.0.0",
+  "description": "Datos de entrenamiento para probar la aplicación web UltraEfficientLLM",
+  "topics": [
+    {
+      "category": "Tecnología",
+      "concepts": [
+        "inteligencia artificial",
+        "machine learning",
+        "deep learning",
+        "procesamiento de lenguaje natural",
+        "redes neuronales",
+        "algoritmos de aprendizaje",
+        "big data",
+        "computación en la nube"
+      ]
+    },
+    {
+      "category": "Aplicaciones",
+      "concepts": [
+        "diagnóstico médico",
+        "conducción autónoma",
+        "detección de fraudes",
+        "análisis de sentimientos",
+        "traducción automática",
+        "reconocimiento de voz",
+        "visión por computadora",
+        "robótica"
+      ]
+    },
+    {
+      "category": "Ética y Gobernanza",
+      "concepts": [
+        "transparencia algorítmica",
+        "privacidad de datos",
+        "sesgo en la IA",
+        "responsabilidad social",
+        "regulaciones de IA",
+        "estándares éticos",
+        "seguridad de la IA"
+      ]
+    }
+  ],
+  "training_examples": [
+    {
+      "prompt": "¿Qué es la inteligencia artificial?",
+      "response": "La inteligencia artificial es una rama de la informática que busca crear sistemas capaces de realizar tareas que normalmente requieren inteligencia humana."
+    },
+    {
+      "prompt": "Explícame el machine learning",
+      "response": "El machine learning permite a las computadoras aprender sin ser programadas explícitamente, identificando patrones en los datos."
+    },
+    {
+      "prompt": "¿Cuáles son las aplicaciones de la IA?",
+      "response": "La IA tiene aplicaciones en medicina, educación, transporte, finanzas y entretenimiento, entre otros campos."
+    },
+    {
+      "prompt": "¿Por qué es importante la ética en la IA?",
+      "response": "La ética en la IA es crucial para asegurar que los sistemas sean justos, transparentes y responsables."
+    },
+    {
+      "prompt": "¿Qué es el procesamiento de lenguaje natural?",
+      "response": "El NLP permite a las máquinas entender, interpretar y generar texto de manera natural."
+    }
+  ],
+  "technical_terms": [
+    "algoritmo",
+    "modelo",
+    "entrenamiento",
+    "validación",
+    "overfitting",
+    "underfitting",
+    "gradiente descendente",
+    "backpropagation",
+    "convolución",
+    "atención",
+    "transformador",
+    "embedding",
+    "tokenización",
+    "lematización",
+    "stemming",
+    "bag of words",
+    "tf-idf",
+    "word2vec",
+    "bert",
+    "gpt"
+  ],
+  "metadata": {
+    "created_date": "2024-01-15",
+    "language": "español",
+    "domain": "inteligencia artificial",
+    "difficulty_level": "intermedio",
+    "estimated_tokens": 1500,
+    "file_size_kb": 8.5
+  }
+} 
