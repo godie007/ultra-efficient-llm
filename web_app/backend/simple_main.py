@@ -17,6 +17,11 @@ import asyncio
 from datetime import datetime
 import logging
 
+# Agregar el directorio src al path para importar UltraEfficientLLM
+sys.path.append(str(Path(__file__).parent.parent.parent / "src"))
+
+from ultra_efficient_llm import UltraEfficientLLM
+
 # Configurar logging
 logging.basicConfig(
     level=logging.INFO,
@@ -45,69 +50,68 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Mock model for demonstration
-class MockUltraEfficientLLM:
+# Wrapper para el modelo real UltraEfficientLLM
+class UltraEfficientLLMWrapper:
     def __init__(self, max_pattern_length=8, min_frequency=1, max_patterns=10000):
-        self.max_pattern_length = max_pattern_length
-        self.min_frequency = min_frequency
-        self.max_patterns = max_patterns
-        self.patterns = {}
-        self.is_trained = False
-        logger.info(f"🔧 Modelo inicializado con parámetros: max_patterns={max_patterns}, max_pattern_length={max_pattern_length}, min_frequency={min_frequency}")
+        self.model = UltraEfficientLLM(
+            max_pattern_length=max_pattern_length,
+            min_frequency=min_frequency,
+            max_patterns=max_patterns
+        )
+        logger.info(f"🔧 Modelo UltraEfficientLLM inicializado con parámetros: max_patterns={max_patterns}, max_pattern_length={max_pattern_length}, min_frequency={min_frequency}")
         
     def train(self, texts):
-        """Mock training"""
+        """Entrenamiento real del modelo"""
         logger.info(f"🎯 Iniciando entrenamiento con {len(texts)} textos")
         logger.info("📊 Procesando patrones...")
         
-        # Simular procesamiento de patrones
-        self.patterns = {"hello": 5, "world": 3, "machine": 2, "learning": 4, "artificial": 3, "intelligence": 4}
-        self.is_trained = True
+        # Entrenar el modelo real
+        self.model.train(texts)
         
-        logger.info(f"✅ Entrenamiento completado. Patrones extraídos: {len(self.patterns)}")
-        logger.info(f"📈 Patrones principales: {list(self.patterns.keys())[:3]}")
+        logger.info(f"✅ Entrenamiento completado. Patrones extraídos: {len(self.model.patterns)}")
+        if self.model.patterns:
+            logger.info(f"📈 Patrones principales: {list(self.model.patterns.keys())[:3]}")
         
     def generate(self, prompt, max_length=20, temperature=0.7):
-        """Mock text generation"""
+        """Generación real de texto"""
         logger.info(f"🎨 Generando texto con prompt: '{prompt[:50]}...'")
         logger.info(f"⚙️ Parámetros: max_length={max_length}, temperature={temperature}")
         
-        if not self.is_trained:
+        if not self.model.is_trained():
             logger.warning("⚠️ Modelo no entrenado")
-            return "Modelo no entrenado"
+            return "Modelo no entrenado. Por favor, entrena el modelo primero."
         
-        # Simple mock generation
-        responses = [
-            "Este es un texto generado por el UltraEfficientLLM basado en los patrones aprendidos durante el entrenamiento.",
-            "El modelo ha procesado tu prompt y generado esta respuesta utilizando técnicas de procesamiento de lenguaje natural.",
-            "Basado en los patrones aprendidos durante el entrenamiento, aquí tienes el resultado de la generación de texto.",
-            "La generación de texto se completó exitosamente utilizando el modelo UltraEfficientLLM entrenado."
-        ]
-        import random
-        response = random.choice(responses)
-        logger.info(f"✅ Texto generado: '{response[:50]}...'")
-        return response
+        # Generar texto real
+        generated_text = self.model.generate(prompt, max_length, temperature)
+        logger.info(f"✅ Texto generado: '{generated_text[:50]}...'")
+        return generated_text
         
     def get_efficiency_report(self):
-        """Mock efficiency report"""
-        report = {
-            "patterns_stored": len(self.patterns),
-            "memory_kb": 13.6,
-            "sparsity": 0.999,
-            "training_status": "completed" if self.is_trained else "not_trained"
-        }
+        """Reporte real de eficiencia"""
+        if not self.model.is_trained():
+            return {
+                "patterns_stored": 0,
+                "memory_kb": 0,
+                "sparsity": 0,
+                "training_status": "not_trained"
+            }
+        
+        report = self.model.get_efficiency_report()
         logger.info(f"📊 Reporte de eficiencia: {report}")
         return report
         
     def _get_active_patterns(self, prompt):
-        """Mock active patterns"""
+        """Obtener patrones activos reales"""
         logger.info(f"🔍 Analizando patrones activos para: '{prompt[:30]}...'")
-        patterns = [("hello", 0.8), ("world", 0.6), ("machine", 0.4), ("learning", 0.7), ("artificial", 0.5)]
-        logger.info(f"🎯 Patrones activos encontrados: {len(patterns)}")
-        return patterns
+        if not self.model.is_trained():
+            return []
+        
+        active_patterns = self.model._get_active_patterns(prompt)
+        logger.info(f"🎯 Patrones activos encontrados: {len(active_patterns)}")
+        return active_patterns
 
 # Global model instance
-model = MockUltraEfficientLLM()
+model = UltraEfficientLLMWrapper()
 training_status = {
     "is_training": False,
     "progress": 0,
@@ -125,12 +129,12 @@ async def startup_event():
     """Initialize the model on startup"""
     global model
     logger.info("🚀 Iniciando UltraEfficientLLM Web API...")
-    model = MockUltraEfficientLLM(
+    model = UltraEfficientLLMWrapper(
         max_pattern_length=8,
         min_frequency=1,
         max_patterns=10000
     )
-    logger.info("✅ UltraEfficientLLM Web API iniciado (versión mock)")
+    logger.info("✅ UltraEfficientLLM Web API iniciado con modelo real")
 
 @app.get("/")
 async def root():
@@ -189,7 +193,8 @@ async def get_model_status():
         "message": training_status["message"],
         "model_stats": stats,
         "patterns_stored": stats.get("patterns_stored", 0),
-        "memory_kb": stats.get("memory_kb", 0)
+        "memory_kb": stats.get("memory_kb", 0),
+        "is_trained": model.model.is_trained() if hasattr(model, 'model') else False
     }
 
 @app.post("/api/upload")
@@ -266,28 +271,56 @@ async def train_model(
     })
     
     try:
-        # Simulate training process
+        # Leer archivos de entrenamiento
         logger.info("📖 Leyendo archivos de entrenamiento...")
-        await asyncio.sleep(2)  # Simulate processing time
+        training_texts = []
+        
+        for filename in files:
+            file_path = UPLOADS_DIR / filename
+            if file_path.exists():
+                try:
+                    with open(file_path, 'r', encoding='utf-8') as f:
+                        content = f.read()
+                        
+                    # Procesar contenido según el tipo de archivo
+                    if filename.endswith('.csv'):
+                        # Procesar CSV
+                        import csv
+                        import io
+                        csv_reader = csv.DictReader(io.StringIO(content))
+                        for row in csv_reader:
+                            if 'texto' in row:
+                                training_texts.append(row['texto'])
+                            elif 'text' in row:
+                                training_texts.append(row['text'])
+                    else:
+                        # Procesar texto plano
+                        paragraphs = [p.strip() for p in content.split('\n\n') if p.strip()]
+                        training_texts.extend(paragraphs)
+                        
+                    logger.info(f"✅ Archivo {filename} procesado: {len(training_texts)} textos")
+                    
+                except Exception as e:
+                    logger.error(f"❌ Error procesando archivo {filename}: {str(e)}")
+                    continue
         
         training_status.update({
             "progress": 25,
-            "message": "Leyendo archivos..."
+            "message": f"Leyendo archivos... {len(training_texts)} textos encontrados"
         })
-        logger.info("✅ Archivos leídos correctamente")
+        
+        if not training_texts:
+            raise Exception("No se pudieron extraer textos válidos de los archivos")
         
         logger.info("🔍 Extrayendo patrones...")
-        await asyncio.sleep(2)  # Simulate more processing time
-        
         training_status.update({
             "progress": 50,
             "message": "Extrayendo patrones..."
         })
-        logger.info("✅ Patrones extraídos")
         
         logger.info("🧠 Inicializando modelo...")
         # Initialize model with new parameters
-        model = MockUltraEfficientLLM(
+        model = UltraEfficientLLMWrapper(
             max_pattern_length=max_pattern_length,
             min_frequency=min_frequency,
             max_patterns=max_patterns
@@ -298,8 +331,8 @@ async def train_model(
             "message": "Entrenando modelo..."
         })
         
-        # Train model
-        model.train([])  # Mock training
+        # Train model with real data
+        model.train(training_texts)
         
         training_status.update({
             "is_training": False,
@@ -317,7 +350,7 @@ async def train_model(
             "message": "Entrenamiento completado exitosamente",
             "training_data": {
                 "files_processed": len(files),
-                "lines_processed": 100,  # Mock data
+                "texts_processed": len(training_texts),
                 "patterns_extracted": stats.get("patterns_stored", 0),
                 "memory_used_kb": stats.get("memory_kb", 0)
             },
@@ -350,7 +383,7 @@ async def generate_text(
         logger.error("❌ Modelo no inicializado")
         raise HTTPException(status_code=400, detail="Modelo no inicializado")
     
-    if training_status["status"] != "trained":
+    if not model.model.is_trained():
         logger.warning("⚠️ Modelo no entrenado")
         raise HTTPException(status_code=400, detail="Modelo no entrenado. Entrene primero el modelo.")
     
@@ -427,7 +460,7 @@ async def reset_model():
     
     logger.info("🔄 Reiniciando modelo")
     
-    model = MockUltraEfficientLLM(
+    model = UltraEfficientLLMWrapper(
         max_pattern_length=8,
         min_frequency=1,
         max_patterns=10000

@@ -356,25 +356,44 @@ class UltraEfficientLLM:
         # Tokenizar prompt
         result_tokens = self._smart_tokenize(prompt)
         activations_this_gen = 0
+        
+        # Asegurar que generamos al menos algunos tokens adicionales
+        min_generated = max(3, max_length // 2)
+        generated_count = 0
 
         for step in range(max_length):
             # Obtener contexto reciente
             context = " ".join(result_tokens[-8:])  # Ventana de contexto ampliada
 
-            # Activar solo patrones relevantes (CLAVE: sparsity extrema)
+            # Activar solo patrones relevantes
             active_patterns = self._get_active_patterns(context)
             activations_this_gen += len(active_patterns)
 
-            if not active_patterns:
+            # Si no hay patrones activos y ya generamos suficiente, parar
+            if not active_patterns and generated_count >= min_generated:
                 break
 
             # Predecir siguiente token usando solo patrones activos
             next_token = self._predict_next_token(context, active_patterns, temperature)
 
             if next_token is None:
-                break
+                # Si no podemos predecir, intentar con patrones más generales
+                if generated_count < min_generated:
+                    # Buscar patrones que contengan palabras del prompt
+                    prompt_words = set(prompt.lower().split())
+                    for pattern, freq in self.patterns.items():
+                        pattern_words = set(pattern.lower().split())
+                        if any(word in pattern_words for word in prompt_words):
+                            pattern_tokens = pattern.split()
+                            if len(pattern_tokens) > len(result_tokens):
+                                next_token = pattern_tokens[len(result_tokens)]
+                                break
+                
+                if next_token is None:
+                    break
 
             result_tokens.append(next_token)
+            generated_count += 1
 
         generation_time = time.time() - start_time
         # Only update activations if there were any active patterns
@@ -402,29 +421,53 @@ class UltraEfficientLLM:
             return self.activation_cache[cache_key]
 
         active = []
-        context_words = set(context.split())
+        context_words = set(context.lower().split())
+        
+        # Si no hay palabras en el contexto, usar el prompt completo
+        if not context_words:
+            context_words = set(context.lower().split())
 
-        # Only examine patterns that share words with the context
+        # Examinar patrones que comparten palabras con el contexto
         for pattern, frequency in self.patterns.items():
-            pattern_words = set(pattern.split())
+            pattern_words = set(pattern.lower().split())
 
-            # Overlap semántico
+            # Overlap semántico mejorado
             overlap = len(context_words & pattern_words)
             if overlap > 0:
-                # Score de activación
-                semantic_score = overlap / len(pattern_words)
-                frequency_score = min(frequency / 10.0, 1.0)  # Normalizar
+                # Score de activación mejorado
+                semantic_score = overlap / max(len(pattern_words), 1)
+                frequency_score = min(frequency / 5.0, 1.0)  # Normalizar con umbral más bajo
+                
+                # Bonus para patrones que empiezan con palabras del contexto
+                start_bonus = 1.0
+                if pattern_words and context_words:
+                    if list(pattern_words)[0] in context_words:
+                        start_bonus = 2.0
 
-                activation_score = semantic_score * frequency_score
+                activation_score = semantic_score * frequency_score * start_bonus
 
-                # Umbral de activación (solo los más relevantes)
-                if activation_score > 0.3:
+                # Umbral de activación más bajo para mayor sensibilidad
+                if activation_score > 0.1:  # Reducido de 0.3 a 0.1
                     active.append((pattern, activation_score))
 
-        # Order by relevance and take only top-k (extreme sparsity)
+        # Si no hay patrones activos, buscar patrones que contengan palabras similares
+        if not active:
+            for pattern, frequency in self.patterns.items():
+                pattern_words = set(pattern.lower().split())
+                
+                # Buscar patrones que contengan palabras del contexto
+                for context_word in context_words:
+                    if any(context_word in pattern_word or pattern_word in context_word 
+                           for pattern_word in pattern_words):
+                        activation_score = min(frequency / 10.0, 1.0)
+                        active.append((pattern, activation_score))
+                        break
+
+        # Ordenar por relevancia y tomar más patrones
         active.sort(key=lambda x: x[1], reverse=True)
-        # Ensure at least one pattern is selected if available
-        top_active = active[:max(1, len(active) // 10)]  # Only top 10%
+        
+        # Tomar más patrones para mejor generación
+        top_active = active[:max(5, len(active) // 5)]  # Tomar más patrones
 
         # Cache the result
         self.activation_cache[cache_key] = top_active
