@@ -4,8 +4,10 @@ import { Toaster } from 'react-hot-toast';
 import Navbar from './components/Navbar';
 import Dashboard from './pages/Dashboard';
 import Training from './pages/Training';
-import Generation from './pages/Generation';
+
 import ModelStatus from './pages/ModelStatus';
+import ModelManagement from './pages/ModelManagement';
+import ChatbotReasoning from './pages/ChatbotReasoning';
 
 function App() {
   return (
@@ -15,8 +17,10 @@ function App() {
         <Routes>
           <Route path="/" element={<Dashboard />} />
           <Route path="/training" element={<Training />} />
-          <Route path="/generation" element={<Generation />} />
+
           <Route path="/status" element={<ModelStatus />} />
+          <Route path="/models" element={<ModelManagement />} />
+          <Route path="/chatbot" element={<ChatbotReasoning />} />
         </Routes>
       </main>
       <Toaster 

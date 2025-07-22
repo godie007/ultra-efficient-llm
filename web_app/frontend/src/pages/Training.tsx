@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
-import { Upload, File, Trash2, Play, Settings, RefreshCw, Wifi, WifiOff, Zap, Brain, Database, Cpu, Activity } from 'lucide-react';
+import { Upload, File, Trash2, Play, Settings, RefreshCw, Wifi, WifiOff, Zap, Brain, Database, Cpu, Activity, Save } from 'lucide-react';
 import toast from 'react-hot-toast';
-import { uploadFile, listFiles, deleteFile, trainModel, getModelStatus } from '../services/api';
+import { uploadFile, listFiles, deleteFile, trainModel, getModelStatus, saveModel } from '../services/api';
 import { UploadedFile, TrainingConfig } from '../types';
 
 const Training: React.FC = () => {
@@ -12,6 +12,8 @@ const Training: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [modelStatus, setModelStatus] = useState<any>(null);
   const [backendConnected, setBackendConnected] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [newModelName, setNewModelName] = useState('');
   const [config, setConfig] = useState<TrainingConfig>({
     max_patterns: 10000,
     max_pattern_length: 8,
@@ -75,9 +77,9 @@ const Training: React.FC = () => {
   const checkBackendConnection = async () => {
     try {
       console.log('🔍 Verificando conexión con el backend...');
-      const response = await fetch('http://localhost:8000/api/health', { 
+      const response = await fetch('http://localhost:8001/api/health', { 
         method: 'GET',
-        signal: AbortSignal.timeout(5000) // 5 segundos timeout
+        signal: AbortSignal.timeout(3000000) // 30 segundos timeout
       });
       
       if (response.ok) {
@@ -215,6 +217,38 @@ const Training: React.FC = () => {
     }
   };
 
+  const handleSaveModel = async () => {
+    if (!backendConnected) {
+      toast.error('Backend no está conectado');
+      return;
+    }
+
+    if (!newModelName.trim()) {
+      toast.error('Ingresa un nombre para el modelo');
+      return;
+    }
+
+    if (!modelStatus?.is_trained) {
+      toast.error('No hay un modelo entrenado para guardar');
+      return;
+    }
+
+    setSaving(true);
+    try {
+      console.log('💾 Guardando modelo:', newModelName);
+      const result = await saveModel(newModelName);
+      toast.success('Modelo guardado exitosamente');
+      console.log('Save result:', result);
+      setNewModelName('');
+    } catch (error: any) {
+      console.error('❌ Error al guardar modelo:', error);
+      const errorMessage = error.response?.data?.detail || error.message || 'Error desconocido';
+      toast.error(`Error al guardar modelo: ${errorMessage}`);
+    } finally {
+      setSaving(false);
+    }
+  };
+
   const toggleFileSelection = (filename: string) => {
     setSelectedFiles(prev => 
       prev.includes(filename) 
@@ -325,7 +359,7 @@ const Training: React.FC = () => {
         {!backendConnected && (
           <div className="mt-6 p-4 bg-red-900/50 rounded-xl border border-red-500/30 backdrop-blur-sm">
             <p className="text-red-200 font-medium">
-              El backend no está disponible. Asegúrate de que esté ejecutándose en http://localhost:8000
+              El backend no está disponible. Asegúrate de que esté ejecutándose en http://localhost:8001
             </p>
             <p className="text-red-300 text-sm mt-2">
               Comando: cd web_app/backend && python simple_main.py
@@ -639,6 +673,48 @@ const Training: React.FC = () => {
           </button>
         </div>
       </div>
+
+      {/* Save Model Section */}
+      {modelStatus?.is_trained && backendConnected && (
+        <div className="card hover-lift">
+          <div className="flex items-center space-x-4 mb-6">
+            <div className="p-2 bg-green-500/20 rounded-lg backdrop-blur-sm border border-green-400/30">
+              <Save className="h-8 w-8 text-green-400" />
+            </div>
+            <h2 className="text-2xl font-bold text-white">Guardar Modelo Entrenado</h2>
+          </div>
+          <div className="flex items-center space-x-4">
+            <input
+              type="text"
+              value={newModelName}
+              onChange={(e) => setNewModelName(e.target.value)}
+              placeholder="Nombre del modelo (ej: mi_modelo_español)"
+              className="input-field flex-1"
+              disabled={saving}
+            />
+            <button
+              onClick={handleSaveModel}
+              disabled={!newModelName.trim() || saving || !backendConnected}
+              className="btn-primary disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
+            >
+              {saving ? (
+                <>
+                  <div className="loading-spinner"></div>
+                  <span>Guardando...</span>
+                </>
+              ) : (
+                <>
+                  <Save className="h-5 w-5" />
+                  <span>Guardar</span>
+                </>
+              )}
+            </button>
+          </div>
+          <p className="text-sm text-slate-400 mt-3">
+            💡 Guarda tu modelo entrenado para reutilizarlo más tarde sin necesidad de volver a entrenar
+          </p>
+        </div>
+      )}
     </div>
   );
 };

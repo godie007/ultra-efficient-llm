@@ -1,0 +1,50 @@
+# DATASET PARA MEJORAR GRAMÁTICA Y CONSISTENCIA - ACUAPONÍA
+
+# CONCEPTOS BÁSICOS CON ESTRUCTURA GRAMATICAL CORRECTA
+¿Qué es la acuaponía? La acuaponía es un sistema que combina peces y plantas en un ciclo cerrado.
+Los peces producen desechos que contienen nutrientes naturales.
+Las plantas absorben los nutrientes de los desechos de los peces.
+El agua se recicla continuamente entre los peces y las plantas.
+La acuaponía es un sistema orgánico y sostenible.
+
+# RAZONAMIENTO CAUSAL CON RESPUESTAS COMPLETAS
+¿Por qué las plantas crecen bien en acuaponía? Las plantas crecen bien en acuaponía porque reciben nutrientes naturales de los desechos de los peces.
+¿Qué pasa si no hay peces en el sistema? Si no hay peces en el sistema, las plantas no reciben nutrientes y pueden morir.
+¿Por qué la acuaponía usa menos agua? La acuaponía usa menos agua porque el agua se recicla continuamente en el sistema cerrado.
+¿Qué pasa si las plantas no absorben nutrientes? Si las plantas no absorben nutrientes, los peces pueden enfermarse por agua contaminada.
+
+# RAZONAMIENTO INFERENCIAL CON DIAGNÓSTICOS CLAROS
+Si las plantas están amarillas, ¿qué puede estar pasando? Si las plantas están amarillas, puede ser falta de nutrientes o demasiados peces en el sistema.
+Si los peces están en la superficie, ¿qué significa? Si los peces están en la superficie, puede ser falta de oxígeno en el agua.
+Si el agua está turbia, ¿qué debo hacer? Si el agua está turbia, debes revisar la filtración y reducir la alimentación de peces.
+Si las plantas no crecen, ¿cuál es la causa? Si las plantas no crecen, la causa puede ser falta de nutrientes o pH incorrecto del agua.
+
+# RAZONAMIENTO COMPARATIVO CON EXPLICACIONES COMPLETAS
+¿Cuál es la diferencia entre acuaponía y agricultura tradicional? La acuaponía usa menos agua y no necesita fertilizantes químicos, a diferencia de la agricultura tradicional.
+¿Por qué la acuaponía es mejor que la hidroponía? La acuaponía es mejor que la hidroponía porque produce tanto plantas como peces, y usa nutrientes naturales.
+¿Cómo se compara la acuaponía con la piscicultura tradicional? La acuaponía es más eficiente que la piscicultura tradicional porque combina peces y plantas en un solo sistema.
+¿Qué ventajas tiene la acuaponía sobre la agricultura en tierra? La acuaponía tiene ventajas sobre la agricultura en tierra porque usa menos espacio y agua, y es más productiva.
+
+# RAZONAMIENTO SECUENCIAL CON PROCESOS CLAROS
+¿Cuáles son los pasos para mantener un sistema de acuaponía? Los pasos para mantener un sistema de acuaponía son: alimentar peces, monitorear agua, cosechar plantas y limpiar filtros.
+¿Cómo funciona el ciclo del agua en acuaponía? El ciclo del agua en acuaponía funciona así: los peces producen desechos, las plantas absorben nutrientes, el agua se limpia y vuelve a los peces.
+¿Qué necesito para empezar un sistema de acuaponía? Para empezar un sistema de acuaponía necesitas: tanque para peces, sistema de filtración, camas para plantas, agua y conocimiento básico.
+¿Cuál es el proceso de maduración del sistema? El proceso de maduración del sistema es: primero se establecen las bacterias, luego se añaden peces y finalmente se plantan las plantas.
+
+# SOLUCIÓN DE PROBLEMAS CON INSTRUCCIONES CLARAS
+¿Qué hago si las plantas están débiles? Si las plantas están débiles, debes verificar los nutrientes en el agua, ajustar el pH y revisar la iluminación.
+¿Cómo soluciono problemas de oxígeno? Para solucionar problemas de oxígeno, debes añadir un aireador, reducir la población de peces y mejorar la filtración.
+¿Qué hacer si los peces no comen? Si los peces no comen, debes revisar la calidad del agua, verificar la temperatura y cambiar el tipo de alimento.
+¿Cómo controlo el pH del agua? Para controlar el pH del agua, debes usar productos específicos, monitorear regularmente y ajustar gradualmente.
+
+# PREGUNTAS ESPECÍFICAS CON RESPUESTAS ESTRUCTURADAS
+¿Qué tipos de peces puedo usar en acuaponía? En acuaponía puedes usar tilapia, trucha, carpa y otros peces de agua dulce que se adapten bien al sistema.
+¿Qué plantas crecen mejor en acuaponía? En acuaponía crecen mejor las lechugas, hierbas, tomates, pepinos y pimientos.
+¿Cuánto tiempo tarda en madurar el sistema? El sistema tarda entre cuatro y seis semanas en madurar completamente.
+¿Es rentable la acuaponía? La acuaponía es rentable especialmente a mediana y gran escala con mercados locales.
+
+# EXPLICACIONES TÉCNICAS CON LENGUAJE CLARO
+¿Cómo funciona el ciclo del nitrógeno en acuaponía? El ciclo del nitrógeno funciona así: los peces producen amonio, las bacterias convierten amonio en nitratos, y las plantas absorben nitratos.
+¿Qué parámetros debo monitorear? Debes monitorear el pH, amonio, nitritos, nitratos, oxígeno disuelto y temperatura del agua.
+¿Cómo afecta la temperatura al sistema? La temperatura afecta el metabolismo de peces, el crecimiento de plantas y la actividad bacteriana en el sistema.
+¿Qué bacterias son importantes en acuaponía? Las bacterias importantes en acuaponía son Nitrosomonas y Nitrobacter que convierten amonio en nitratos para las plantas. 

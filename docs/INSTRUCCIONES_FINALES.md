@@ -115,7 +115,7 @@ python simple_main.py
 ## 🐛 **Si Aún Hay Problemas**
 
 ### **Verificar Backend:**
-1. Asegúrate de que el backend esté corriendo en `http://localhost:8000`
+1. Asegúrate de que el backend esté corriendo en `http://localhost:8001`
 2. Revisa los logs del backend para errores
 3. Verifica que aparezca: *"✅ UltraEfficientLLM Web API iniciado con modelo real"*
 

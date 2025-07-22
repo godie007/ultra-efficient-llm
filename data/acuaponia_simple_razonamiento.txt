@@ -1,0 +1,37 @@
+# DATASET SIMPLE PARA RAZONAMIENTO - ACUAPONÍA
+
+# CONCEPTOS BÁSICOS
+¿Qué es la acuaponía? La acuaponía combina peces y plantas en un sistema cerrado.
+Los peces producen desechos que contienen nutrientes.
+Las plantas absorben los nutrientes de los desechos de los peces.
+El agua se recicla continuamente entre peces y plantas.
+
+# RAZONAMIENTO CAUSAL
+¿Por qué las plantas crecen bien en acuaponía? Porque reciben nutrientes naturales de los desechos de los peces.
+¿Qué pasa si no hay peces en el sistema? Las plantas no reciben nutrientes y pueden morir.
+¿Por qué la acuaponía usa menos agua? Porque el agua se recicla continuamente en el sistema cerrado.
+¿Qué pasa si las plantas no absorben nutrientes? Los peces pueden enfermarse por agua contaminada.
+
+# RAZONAMIENTO INFERENCIAL
+Si las plantas están amarillas, ¿qué puede estar pasando? Puede ser falta de nutrientes o demasiados peces.
+Si los peces están en la superficie, ¿qué significa? Puede ser falta de oxígeno en el agua.
+Si el agua está turbia, ¿qué debo hacer? Revisar la filtración y reducir la alimentación de peces.
+Si las plantas no crecen, ¿cuál es la causa? Puede ser falta de nutrientes o pH incorrecto del agua.
+
+# RAZONAMIENTO COMPARATIVO
+¿Cuál es la diferencia entre acuaponía y agricultura tradicional? La acuaponía usa menos agua y no necesita fertilizantes químicos.
+¿Por qué la acuaponía es mejor que la hidroponía? Porque produce tanto plantas como peces, y usa nutrientes naturales.
+¿Cómo se compara la acuaponía con la piscicultura tradicional? La acuaponía es más eficiente porque combina peces y plantas.
+¿Qué ventajas tiene la acuaponía sobre la agricultura en tierra? Usa menos espacio y agua, y es más productiva.
+
+# RAZONAMIENTO SECUENCIAL
+¿Cuáles son los pasos para mantener un sistema de acuaponía? Alimentar peces, monitorear agua, cosechar plantas, limpiar filtros.
+¿Cómo funciona el ciclo del agua en acuaponía? Los peces producen desechos, las plantas absorben nutrientes, el agua se limpia y vuelve a los peces.
+¿Qué necesito para empezar un sistema de acuaponía? Tanque para peces, sistema de filtración, camas para plantas, agua y conocimiento básico.
+¿Cuál es el proceso de maduración del sistema? Primero se establecen las bacterias, luego se añaden peces, finalmente plantas.
+
+# SOLUCIÓN DE PROBLEMAS
+¿Qué hago si las plantas están débiles? Verificar nutrientes, ajustar pH, revisar iluminación.
+¿Cómo soluciono problemas de oxígeno? Añadir aireador, reducir población de peces, mejorar filtración.
+¿Qué hacer si los peces no comen? Revisar calidad del agua, temperatura, y tipo de alimento.
+¿Cómo controlo el pH del agua? Usar productos específicos, monitorear regularmente, ajustar gradualmente. 

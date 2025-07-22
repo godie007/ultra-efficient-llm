@@ -9,7 +9,7 @@ import os
 from pathlib import Path
 
 # Configuración
-BACKEND_URL = "http://localhost:8000"
+BACKEND_URL = "http://localhost:8001"
 TEST_FILES = [
     "test_data.txt",
     "test_data.json", 

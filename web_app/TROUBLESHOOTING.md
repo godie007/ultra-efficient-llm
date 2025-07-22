@@ -16,8 +16,8 @@ python simple_main.py
 **Logs esperados**:
 ```
 🚀 Iniciando UltraEfficientLLM Web API (versión mock)...
-📍 Backend: http://localhost:8000
-📚 Documentación: http://localhost:8000/api/docs
+📍 Backend: http://localhost:8001
+📚 Documentación: http://localhost:8001/api/docs
 ==================================================
 2024-01-15 10:30:00 - INFO - 🚀 Iniciando UltraEfficientLLM Web API...
 2024-01-15 10:30:00 - INFO - 🔧 Modelo inicializado con parámetros: max_patterns=10000, max_pattern_length=8, min_frequency=1
@@ -28,9 +28,9 @@ python simple_main.py
 ### **2. Verificar Acceso al Backend**
 
 **Paso 2**: Abre tu navegador y ve a:
-- http://localhost:8000/ (debería mostrar información de la API)
-- http://localhost:8000/api/health (debería mostrar estado saludable)
-- http://localhost:8000/api/files (debería mostrar lista de archivos)
+- http://localhost:8001/ (debería mostrar información de la API)
+- http://localhost:8001/api/health (debería mostrar estado saludable)
+- http://localhost:8001/api/files (debería mostrar lista de archivos)
 
 ### **3. Verificar el Frontend**
 
@@ -121,8 +121,8 @@ Estado de carga: Listo
 
 ```bash
 # Desde el directorio web_app
-curl http://localhost:8000/api/health
-curl http://localhost:8000/api/files
+curl http://localhost:8001/api/health
+curl http://localhost:8001/api/files
 ```
 
 ### **2. Verificar Directorio de Uploads**
@@ -144,7 +144,7 @@ Los logs del backend deberían mostrar:
 
 ## 📋 **Checklist de Verificación**
 
-- [ ] Backend ejecutándose en http://localhost:8000
+- [ ] Backend ejecutándose en http://localhost:8001
 - [ ] Frontend ejecutándose en http://localhost:5173
 - [ ] Panel de debug visible en la página Training
 - [ ] Logs en la consola del navegador
@@ -168,6 +168,6 @@ Si después de seguir estos pasos el problema persiste:
 1. **Comparte los logs** de la consola del navegador
 2. **Comparte los logs** de la consola del backend
 3. **Verifica** que ambos servidores estén ejecutándose
-4. **Prueba** acceder directamente a http://localhost:8000/api/files
+4. **Prueba** acceder directamente a http://localhost:8001/api/files
 
 **¡Con estos logs podremos identificar exactamente dónde está el problema!** 🔍✨ 

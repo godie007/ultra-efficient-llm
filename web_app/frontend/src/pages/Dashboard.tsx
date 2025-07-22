@@ -63,14 +63,15 @@ const Dashboard: React.FC = () => {
       iconColor: 'text-blue-400',
     },
     {
-      title: 'Generar Texto',
-      description: 'Prueba el modelo con prompts personalizados',
+      title: 'Chatbot IA',
+      description: 'Chat inteligente con razonamiento paso a paso',
       icon: MessageSquare,
-      path: '/generation',
+      path: '/chatbot',
       color: 'bg-gradient-to-r from-emerald-500 to-emerald-600',
       bgColor: 'bg-emerald-900/20',
       borderColor: 'border-emerald-400/30',
       iconColor: 'text-emerald-400',
+      requiresModel: true,
     },
     {
       title: 'Ver Estado',
@@ -206,19 +207,28 @@ const Dashboard: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {quickActions.map((action) => {
             const Icon = action.icon;
+            const isDisabled = action.requiresModel && (!modelStatus || modelStatus.status !== 'trained');
+            
             return (
               <Link
                 key={action.path}
                 to={action.path}
-                className={`group block p-6 ${action.bgColor} border ${action.borderColor} rounded-xl hover:shadow-2xl transition-all duration-300 backdrop-blur-sm hover-lift`}
+                className={`group block p-6 ${action.bgColor} border ${action.borderColor} rounded-xl hover:shadow-2xl transition-all duration-300 backdrop-blur-sm hover-lift ${
+                  isDisabled ? 'opacity-50 cursor-not-allowed pointer-events-none' : ''
+                }`}
               >
-                <div className={`inline-flex p-3 rounded-lg text-white mb-4 ${action.color}`}>
+                <div className={`inline-flex p-3 rounded-lg text-white mb-4 ${action.color} ${isDisabled ? 'opacity-50' : ''}`}>
                   <Icon className="h-6 w-6" />
                 </div>
                 <h3 className={`text-lg font-bold text-white mb-2 group-hover:${action.iconColor} transition-colors`}>
                   {action.title}
                 </h3>
                 <p className="text-slate-300">{action.description}</p>
+                {isDisabled && (
+                  <div className="mt-2 text-xs text-red-400 bg-red-900/20 px-2 py-1 rounded">
+                    Requiere modelo entrenado
+                  </div>
+                )}
               </Link>
             );
           })}

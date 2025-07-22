@@ -1,6 +1,6 @@
 
 import { Link, useLocation } from 'react-router-dom';
-import { Brain, Upload, MessageSquare, BarChart3, Menu } from 'lucide-react';
+import { Brain, Upload, MessageSquare, BarChart3, Menu, HardDrive, Bot } from 'lucide-react';
 
 const Navbar: React.FC = () => {
   const location = useLocation();
@@ -8,8 +8,9 @@ const Navbar: React.FC = () => {
   const navItems = [
     { path: '/', label: 'Dashboard', icon: Brain },
     { path: '/training', label: 'Entrenamiento', icon: Upload },
-    { path: '/generation', label: 'Generación', icon: MessageSquare },
+    { path: '/chatbot', label: 'Chatbot IA', icon: Bot },
     { path: '/status', label: 'Estado', icon: BarChart3 },
+    { path: '/models', label: 'Modelos', icon: HardDrive },
   ];
 
   return (

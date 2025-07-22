@@ -31,8 +31,8 @@ python simple_main.py
 **Logs esperados:**
 ```
 🚀 Iniciando UltraEfficientLLM Web API (versión mock)...
-📍 Backend: http://localhost:8000
-📚 Documentación: http://localhost:8000/api/docs
+📍 Backend: http://localhost:8001
+📚 Documentación: http://localhost:8001/api/docs
 ==================================================
 2024-01-15 10:30:00 - INFO - 🚀 Iniciando UltraEfficientLLM Web API...
 2024-01-15 10:30:00 - INFO - 🔧 Modelo inicializado con parámetros: max_patterns=10000, max_pattern_length=8, min_frequency=1
@@ -48,9 +48,9 @@ npm run dev
 
 ### **2. Verificar Acceso**
 
-- **Backend**: http://localhost:8000/
+- **Backend**: http://localhost:8001/
 - **Frontend**: http://localhost:5173
-- **API Docs**: http://localhost:8000/api/docs
+- **API Docs**: http://localhost:8001/api/docs
 
 ---
 
@@ -58,7 +58,7 @@ npm run dev
 
 ### **Prueba 1: Verificar Estado Inicial**
 
-1. **Acceder a**: http://localhost:8000/api/model/status
+1. **Acceder a**: http://localhost:8001/api/model/status
 2. **Logs esperados**:
    ```
    2024-01-15 10:30:05 - INFO - 📊 Consulta de estado del modelo

@@ -1,0 +1,69 @@
+# DATASET MEJORADO PARA RAZONAMIENTO SEMÁNTICO - ACUAPONÍA
+
+# CONCEPTOS BÁSICOS
+¿Qué es la acuaponía? La acuaponía combina peces y plantas en un sistema cerrado.
+Los peces producen desechos que contienen nutrientes.
+Las plantas absorben los nutrientes de los desechos de los peces.
+El agua se recicla continuamente entre peces y plantas.
+Es un sistema orgánico y sostenible.
+
+# RAZONAMIENTO CAUSAL (CAUSA-EFECTO)
+¿Por qué las plantas crecen bien en acuaponía? Porque reciben nutrientes naturales de los desechos de los peces.
+¿Qué pasa si no hay peces en el sistema? Las plantas no reciben nutrientes y pueden morir.
+¿Por qué la acuaponía usa menos agua? Porque el agua se recicla continuamente en el sistema cerrado.
+¿Qué pasa si las plantas no absorben nutrientes? Los peces pueden enfermarse por agua contaminada.
+¿Por qué los peces necesitan oxígeno? Porque sin oxígeno los peces no pueden respirar y mueren.
+
+# RAZONAMIENTO COMPARATIVO
+¿Cuál es la diferencia entre acuaponía y agricultura tradicional? La acuaponía usa menos agua y no necesita fertilizantes químicos.
+¿Por qué la acuaponía es mejor que la hidroponía? Porque produce tanto plantas como peces, y usa nutrientes naturales.
+¿Cómo se compara la acuaponía con la piscicultura tradicional? La acuaponía es más eficiente porque combina peces y plantas.
+¿Qué ventajas tiene la acuaponía sobre la agricultura en tierra? Usa menos espacio y agua, y es más productiva.
+
+# RAZONAMIENTO INFERENCIAL (DIAGNÓSTICO)
+Si las plantas están amarillas, ¿qué puede estar pasando? Puede ser falta de nutrientes o demasiados peces.
+Si los peces están en la superficie, ¿qué significa? Puede ser falta de oxígeno en el agua.
+Si el agua está turbia, ¿qué debo hacer? Revisar la filtración y reducir la alimentación de peces.
+Si las plantas no crecen, ¿cuál es la causa? Puede ser falta de nutrientes o pH incorrecto del agua.
+
+# RAZONAMIENTO SECUENCIAL (PROCESOS)
+¿Cuáles son los pasos para mantener un sistema de acuaponía? Alimentar peces, monitorear agua, cosechar plantas, limpiar filtros.
+¿Cómo funciona el ciclo del agua en acuaponía? Los peces producen desechos, las plantas absorben nutrientes, el agua se limpia y vuelve a los peces.
+¿Qué necesito para empezar un sistema de acuaponía? Tanque para peces, sistema de filtración, camas para plantas, agua y conocimiento básico.
+¿Cuál es el proceso de maduración del sistema? Primero se establecen las bacterias, luego se añaden peces, finalmente plantas.
+
+# RAZONAMIENTO DE SOLUCIÓN DE PROBLEMAS
+¿Qué hago si las plantas están débiles? Verificar nutrientes, ajustar pH, revisar iluminación.
+¿Cómo soluciono problemas de oxígeno? Añadir aireador, reducir población de peces, mejorar filtración.
+¿Qué hacer si los peces no comen? Revisar calidad del agua, temperatura, y tipo de alimento.
+¿Cómo controlo el pH del agua? Usar productos específicos, monitorear regularmente, ajustar gradualmente.
+
+# RAZONAMIENTO DE PLANIFICACIÓN
+¿Qué tamaño de sistema necesito para mi familia? Depende del número de personas, espacio disponible y tiempo disponible.
+¿Cuántos peces puedo tener por metro cúbico? Generalmente 10-20 peces por metro cúbico de agua.
+¿Qué plantas crecen mejor en acuaponía? Lechugas, hierbas, tomates, pepinos y pimientos.
+¿Cuánto tiempo tarda en madurar el sistema? Entre 4-6 semanas para que las bacterias se establezcan.
+
+# RAZONAMIENTO DE OPTIMIZACIÓN
+¿Cómo puedo hacer mi sistema más eficiente? Usar iluminación LED, automatizar alimentación, optimizar espacio.
+¿Qué puedo hacer para aumentar la producción? Mejorar filtración, optimizar densidad de peces, usar variedades productivas.
+¿Cómo reduzco el consumo de energía? Usar bombas eficientes, aprovechar luz natural, optimizar horarios.
+¿Qué puedo hacer para mejorar la calidad del agua? Usar filtros biológicos, monitorear parámetros, hacer cambios parciales.
+
+# RAZONAMIENTO DE SOSTENIBILIDAD
+¿Por qué la acuaponía es sostenible? Usa menos recursos, produce más alimento, es orgánico.
+¿Cómo contribuye la acuaponía al medio ambiente? Reduce uso de agua, elimina fertilizantes químicos, produce localmente.
+¿Qué impacto tiene en la seguridad alimentaria? Proporciona alimentos frescos, reduce dependencia externa, es escalable.
+¿Cómo puede ayudar en zonas urbanas? Usa poco espacio, produce alimentos frescos, reduce transporte.
+
+# RAZONAMIENTO ECONÓMICO
+¿Es rentable la acuaponía? Sí, especialmente a mediana y gran escala con mercados locales.
+¿Cuánto cuesta empezar un sistema pequeño? Entre 500-2000 dólares para un sistema básico.
+¿Cuánto tiempo tarda en ser rentable? Entre 6-12 meses dependiendo del tamaño y mercado.
+¿Qué factores afectan la rentabilidad? Tamaño del sistema, eficiencia, mercado local, costos de energía.
+
+# RAZONAMIENTO TÉCNICO AVANZADO
+¿Cómo funciona el ciclo del nitrógeno en acuaponía? Los peces producen amonio, las bacterias lo convierten en nitritos y nitratos, las plantas los absorben.
+¿Qué parámetros debo monitorear? pH, amonio, nitritos, nitratos, oxígeno disuelto, temperatura.
+¿Cómo afecta la temperatura al sistema? Afecta el metabolismo de peces, crecimiento de plantas y actividad bacteriana.
+¿Qué bacterias son importantes en acuaponía? Nitrosomonas y Nitrobacter que convierten amonio en nitratos. 

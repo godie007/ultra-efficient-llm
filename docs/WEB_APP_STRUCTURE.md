@@ -216,8 +216,8 @@ npm run dev
 
 ### **3. Acceso a la Aplicación**
 - **Frontend**: http://localhost:5173
-- **Backend**: http://localhost:8000
-- **Documentación API**: http://localhost:8000/api/docs
+- **Backend**: http://localhost:8001
+- **Documentación API**: http://localhost:8001/api/docs
 
 ---
 

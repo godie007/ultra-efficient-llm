@@ -225,7 +225,25 @@ class UltraEfficientLLM:
         # Restore entities, handling potential underscores
         tokens = [token.replace('entity_', '').replace('_', ' ') for token in tokens]
 
-        return [token for token in tokens if len(token) > 0]
+        # Filtrar tokens que parezcan nombres de archivos o extensiones
+        filtered_tokens = []
+        for token in tokens:
+            if len(token) > 0:
+                # Filtrar extensiones de archivo comunes
+                if token in ['txt', 'py', 'md', 'json', 'csv', 'html', 'css', 'js', 'ts', 'xml', 'yaml', 'yml']:
+                    continue
+                # Filtrar nombres de archivos comunes
+                if token in ['data', 'test', 'main', 'config', 'utils', 'models', 'src', 'web_app', 'backend', 'frontend']:
+                    continue
+                # Filtrar tokens que contengan puntos (posibles rutas de archivo)
+                if '.' in token:
+                    continue
+                # Filtrar tokens que parezcan rutas de directorio
+                if '/' in token or '\\' in token:
+                    continue
+                filtered_tokens.append(token)
+
+        return filtered_tokens
 
     def _has_semantic_value(self, pattern: str) -> bool:
         """Determina si un patrón tiene valor semántico real"""
@@ -238,6 +256,18 @@ class UltraEfficientLLM:
 
         # Filtrar solo puntuación
         if re.match(r'^[^\w\s]+$', pattern):
+            return False
+
+        # Filtrar patrones que contengan elementos de archivos
+        file_related_words = {'txt', 'py', 'md', 'json', 'csv', 'html', 'css', 'js', 'ts', 'xml', 'yaml', 'yml',
+                             'data', 'test', 'main', 'config', 'utils', 'models', 'src', 'web_app', 'backend', 'frontend'}
+        
+        # Si el patrón contiene palabras relacionadas con archivos, rechazarlo
+        if any(word in file_related_words for word in words):
+            return False
+
+        # Filtrar patrones que contengan puntos o barras (posibles rutas)
+        if '.' in pattern or '/' in pattern or '\\' in pattern:
             return False
 
         # Debe tener al menos una palabra significativa
@@ -349,7 +379,7 @@ class UltraEfficientLLM:
             self.word_vectors[word] = vector
 
     def generate(self, prompt: str, max_length: int = 20, temperature: float = 0.7) -> str:
-        """Generación ultra-rápida activando solo patrones relevantes"""
+        """Generación ultra-rápida activando solo patrones relevantes - OPTIMIZADO"""
         start_time = time.time()
         self.stats['total_generations'] += 1
 
@@ -357,13 +387,16 @@ class UltraEfficientLLM:
         result_tokens = self._smart_tokenize(prompt)
         activations_this_gen = 0
         
-        # Asegurar que generamos al menos algunos tokens adicionales
-        min_generated = max(3, max_length // 2)
+        # OPTIMIZACIÓN: Reducir el número mínimo de tokens generados para mayor velocidad
+        min_generated = max(2, max_length // 3)  # Reducido de max_length // 2
         generated_count = 0
 
+        # OPTIMIZACIÓN: Pre-calcular palabras del prompt para búsqueda rápida
+        prompt_words = set(prompt.lower().split())
+
         for step in range(max_length):
-            # Obtener contexto reciente
-            context = " ".join(result_tokens[-8:])  # Ventana de contexto ampliada
+            # OPTIMIZACIÓN: Ventana de contexto más pequeña para mayor velocidad
+            context = " ".join(result_tokens[-6:])  # Reducido de 8 a 6
 
             # Activar solo patrones relevantes
             active_patterns = self._get_active_patterns(context)
@@ -377,17 +410,23 @@ class UltraEfficientLLM:
             next_token = self._predict_next_token(context, active_patterns, temperature)
 
             if next_token is None:
-                # Si no podemos predecir, intentar con patrones más generales
+                # OPTIMIZACIÓN: Búsqueda más eficiente de patrones generales
                 if generated_count < min_generated:
-                    # Buscar patrones que contengan palabras del prompt
-                    prompt_words = set(prompt.lower().split())
+                    # Buscar patrones que contengan palabras del prompt - LIMITADO
+                    max_patterns_to_check = 100  # Limitar búsqueda
+                    patterns_checked = 0
+                    
                     for pattern, freq in self.patterns.items():
+                        if patterns_checked >= max_patterns_to_check:
+                            break
+                        
                         pattern_words = set(pattern.lower().split())
                         if any(word in pattern_words for word in prompt_words):
                             pattern_tokens = pattern.split()
                             if len(pattern_tokens) > len(result_tokens):
                                 next_token = pattern_tokens[len(result_tokens)]
                                 break
+                        patterns_checked += 1
                 
                 if next_token is None:
                     break
@@ -413,7 +452,7 @@ class UltraEfficientLLM:
         return result
 
     def _get_active_patterns(self, context: str) -> List[Tuple[str, float]]:
-        """Activa solo patrones relevantes - CLAVE de la eficiencia"""
+        """Activa solo patrones relevantes - CLAVE de la eficiencia - OPTIMIZADO"""
         cache_key = context[-20:]  # Key de cache - mantiene 20 caracteres para la clave
 
         if cache_key in self.activation_cache:
@@ -427,16 +466,31 @@ class UltraEfficientLLM:
         if not context_words:
             context_words = set(context.lower().split())
 
+        # OPTIMIZACIÓN: Limitar el número de patrones examinados para mayor velocidad
+        max_patterns_to_check = min(1000, len(self.patterns))  # Máximo 1000 patrones por consulta
+        
+        # OPTIMIZACIÓN: Usar items() en lugar de iterar sobre keys
+        patterns_items = list(self.patterns.items())
+        if len(patterns_items) > max_patterns_to_check:
+            # Seleccionar patrones más relevantes basados en frecuencia
+            patterns_items = sorted(patterns_items, key=lambda x: x[1], reverse=True)[:max_patterns_to_check]
+
         # Examinar patrones que comparten palabras con el contexto
-        for pattern, frequency in self.patterns.items():
+        for pattern, frequency in patterns_items:
             pattern_words = set(pattern.lower().split())
 
-            # Overlap semántico mejorado
-            overlap = len(context_words & pattern_words)
+            # OPTIMIZACIÓN: Verificación rápida de overlap
+            if len(context_words) < len(pattern_words):
+                # Si el contexto es más pequeño, verificar si sus palabras están en el patrón
+                overlap = sum(1 for word in context_words if word in pattern_words)
+            else:
+                # Si el patrón es más pequeño, verificar si sus palabras están en el contexto
+                overlap = sum(1 for word in pattern_words if word in context_words)
+            
             if overlap > 0:
-                # Score de activación mejorado
+                # Score de activación optimizado
                 semantic_score = overlap / max(len(pattern_words), 1)
-                frequency_score = min(frequency / 5.0, 1.0)  # Normalizar con umbral más bajo
+                frequency_score = min(frequency / 5.0, 1.0)
                 
                 # Bonus para patrones que empiezan con palabras del contexto
                 start_bonus = 1.0
@@ -447,7 +501,7 @@ class UltraEfficientLLM:
                 activation_score = semantic_score * frequency_score * start_bonus
 
                 # Umbral de activación más bajo para mayor sensibilidad
-                if activation_score > 0.1:  # Reducido de 0.3 a 0.1
+                if activation_score > 0.1:
                     active.append((pattern, activation_score))
 
         # Si no hay patrones activos, buscar patrones que contengan palabras similares

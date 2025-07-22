@@ -78,8 +78,8 @@
         <div class="info-box">
             <h3>📋 Información del Test</h3>
             <p><strong>Frontend:</strong> http://localhost:5173</p>
-            <p><strong>Backend:</strong> http://localhost:8000</p>
-            <p><strong>Proxy:</strong> /api → http://localhost:8000/api</p>
+            <p><strong>Backend:</strong> http://localhost:8001</p>
+            <p><strong>Proxy:</strong> /api → http://localhost:8001/api</p>
             <p><strong>Propósito:</strong> Verificar si el proxy de Vite está funcionando correctamente</p>
         </div>
 
@@ -177,17 +177,17 @@
             
             try {
                 // Test directo al backend
-                const data = await makeRequest('http://localhost:8000/api/health');
+                const data = await makeRequest('http://localhost:8001/api/health');
                 resultDiv.innerHTML = `<div class="success">
                     <strong>✅ Conexión Directa Funcionando</strong><br>
-                    <p>URL: http://localhost:8000/api/health</p>
+                    <p>URL: http://localhost:8001/api/health</p>
                     <p>Status: 200 OK</p>
                     <pre>${JSON.stringify(data, null, 2)}</pre>
                 </div>`;
             } catch (error) {
                 resultDiv.innerHTML = `<div class="error">
                     <strong>❌ Conexión Directa Falló</strong><br>
-                    <p>URL: http://localhost:8000/api/health</p>
+                    <p>URL: http://localhost:8001/api/health</p>
                     <p>Error: ${error.message}</p>
                 </div>`;
             }
@@ -204,7 +204,7 @@
                 },
                 {
                     name: 'Direct URL',
-                    url: 'http://localhost:8000/api/health',
+                    url: 'http://localhost:8001/api/health',
                     description: 'Conexión directa al backend'
                 },
                 {
@@ -214,7 +214,7 @@
                 },
                 {
                     name: 'Backend Base',
-                    url: 'http://localhost:8000',
+                    url: 'http://localhost:8001',
                     description: 'URL base del backend'
                 }
             ];
@@ -236,7 +236,7 @@
         window.onload = function() {
             log('🚀 Página de test de proxy cargada');
             log('📍 Frontend: http://localhost:5173');
-            log('📍 Backend: http://localhost:8000');
+            log('📍 Backend: http://localhost:8001');
             log('🔍 Verifica que ambos servidores estén ejecutándose');
         };
     </script>
