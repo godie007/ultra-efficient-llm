@@ -221,14 +221,6 @@ Este proyecto está bajo la Licencia MIT. Ver [LICENSE](LICENSE) para más detal
 
 ---
 
-## 🎉 Agradecimientos
-
-- **Investigadores** que inspiraron este enfoque
-- **Comunidad** por el feedback y mejoras
-- **Contribuidores** que han ayudado al desarrollo
-
----
-
 **¡El UltraEfficientLLM representa un avance revolucionario en eficiencia y escalabilidad de modelos de lenguaje!** 🚀✨
 
 **¿Listo para explorar el futuro de la IA eficiente?** 🧠⚡ 
