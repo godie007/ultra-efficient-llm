@@ -1,5 +1,11 @@
 """
-UltraEfficientLLM - Modelo de lenguaje ultra-eficiente basado en patrones selectivos
+UltraEfficientLLM - Motor de lenguaje basado en n-gramas con backoff de n variable.
+
+NO es una red neuronal ni un LLM: es un modelo estadístico de n-gramas (índice de
+continuaciones + backoff estilo Infini-gram). Recall exacto y barato sobre lo visto, pero
+no generaliza. La generalización la aporta el componente neuronal del híbrido (ver
+`hybrid.py`, `neural_backbone.py`) y los ejemplos recuperados por RAG (`semantic_memory.py`,
+`rag.py`). La calidad se mide con perplejidad en `evaluation.py`.
 """
 
 import re
@@ -57,14 +63,21 @@ def extract_patterns_chunk(chunk, max_pattern_length, min_frequency):
 
 class UltraEfficientLLM:
     """
-    Modelo de lenguaje ultra-eficiente basado en patrones selectivos
+    Motor de lenguaje basado en n-gramas con índice de continuaciones y backoff de n variable.
 
-    Características revolucionarias:
-    - Memoria: <1MB vs 14GB de modelos tradicionales
-    - Activación: 5-10% de patrones vs 100% de parámetros
-    - Velocidad: 500+ tokens/seg vs 20 tokens/seg
-    - Hardware: Funciona en cualquier PC vs GPUs especializadas
+    Funcionamiento:
+    - Entrenamiento: extrae n-gramas ponderados y construye un índice
+      contexto -> Counter(siguiente_token) para longitudes 0..max_pattern_length-1.
+    - Generación: backoff del contexto más largo visto al más corto, con descuento
+      geométrico; el nivel unigrama garantiza cobertura. Consulta en tiempo sublineal.
+
+    Límite fundamental: solo recombina lo visto; no generaliza a contextos nuevos. Úsalo como
+    componente barato de un híbrido con un modelo neuronal (ver `hybrid.py`).
     """
+
+    # Factor de descuento por nivel de backoff (estilo "stupid backoff", Brants et al. 2007):
+    # los contextos más largos pesan más; los más cortos se descuentan geométricamente.
+    _BACKOFF_FACTOR = 0.4
 
     def __init__(self, max_pattern_length=5, min_frequency=2, max_patterns=10000):
         self.max_pattern_length = max_pattern_length
@@ -73,8 +86,9 @@ class UltraEfficientLLM:
 
         # Estructuras de datos ultra-compactas
         self.patterns = {}  # pattern -> frequency
-        self.pattern_graph = defaultdict(dict)  # pattern -> next_words -> frequency
-        self.word_vectors = {}  # Embeddings ultra-compactos
+        # Índice de continuaciones n-grama: contexto (tupla de tokens) -> Counter de siguientes tokens.
+        # Permite predecir con backoff de n variable en tiempo sublineal, sin escanear todos los patrones.
+        self.ngram_index = defaultdict(Counter)
         self.activation_cache = {}  # Cache inteligente
 
         # Estadísticas de eficiencia
@@ -104,8 +118,7 @@ class UltraEfficientLLM:
             'min_frequency': self.min_frequency,
             'max_patterns': self.max_patterns,
             'patterns': self.patterns,
-            'pattern_graph': dict(self.pattern_graph),  # Convertir defaultdict a dict
-            'word_vectors': self.word_vectors,
+            'ngram_index': {ctx: dict(counter) for ctx, counter in self.ngram_index.items()},
             'stats': self.stats
         }
         
@@ -140,13 +153,15 @@ class UltraEfficientLLM:
             self.min_frequency = model_data['min_frequency']
             self.max_patterns = model_data['max_patterns']
             self.patterns = model_data['patterns']
-            self.pattern_graph = defaultdict(dict, model_data['pattern_graph'])
-            self.word_vectors = model_data['word_vectors']
+            self.ngram_index = defaultdict(
+                Counter,
+                {ctx: Counter(counter) for ctx, counter in model_data['ngram_index'].items()}
+            )
             self.stats = model_data['stats']
-            
+
             print(f"✅ Modelo cargado exitosamente")
             print(f"📊 Patrones cargados: {len(self.patterns)}")
-            print(f"📊 Embeddings cargados: {len(self.word_vectors)}")
+            print(f"📊 Contextos n-grama: {len(self.ngram_index)}")
             print(f"📊 Memoria utilizada: {self.stats['memory_kb']:.2f} KB")
             
         except FileNotFoundError:
@@ -175,8 +190,7 @@ class UltraEfficientLLM:
         return {
             'is_trained': self.is_trained(),
             'patterns_count': len(self.patterns),
-            'word_vectors_count': len(self.word_vectors),
-            'pattern_graph_nodes': len(self.pattern_graph),
+            'ngram_contexts': len(self.ngram_index),
             'memory_usage_kb': self.stats['memory_kb'],
             'max_pattern_length': self.max_pattern_length,
             'min_frequency': self.min_frequency,
@@ -190,15 +204,14 @@ class UltraEfficientLLM:
         print(f"   Patrones extraídos: {len(all_patterns)}")
         useful_patterns = self._filter_by_utility(all_patterns)
         print(f"   Patrones útiles: {len(useful_patterns)}")
-        self._build_pattern_graph(useful_patterns, texts)
-        print(f"   Grafo construido: {len(self.pattern_graph)} nodos")
-        self._create_compact_embeddings(useful_patterns)
-        print(f"   Embeddings creados: {len(self.word_vectors)}")
+        self.patterns = useful_patterns
+        self._build_ngram_index(texts)
+        print(f"   Índice n-grama: {len(self.ngram_index)} contextos")
         training_time = time.time() - start_time
         self._update_memory_stats()
         print(f"✅ Entrenamiento completado en {training_time:.2f} segundos")
-        print(f"📊 Memoria utilizada: {self.stats['memory_kb']:.2f} KB")
-        print(f"🎯 Eficiencia: {len(useful_patterns)} patrones vs ~175B parámetros GPT")
+        print(f"📊 Memoria del índice: {self.stats['memory_kb']:.2f} KB")
+        print(f"🎯 {len(useful_patterns)} patrones | {len(self.ngram_index)} contextos n-grama")
 
     def _extract_smart_patterns_parallel(self, texts: List[str]) -> Dict[str, int]:
         num_workers = min(multiprocessing.cpu_count(), 32)
@@ -300,113 +313,106 @@ class UltraEfficientLLM:
 
         return selected
 
-    def _build_pattern_graph(self, patterns: Dict[str, int], texts: List[str]) -> None:
-        """Construye grafo de transiciones entre patrones"""
-        self.patterns = patterns
+    def _build_ngram_index(self, texts: List[str]) -> None:
+        """Construye el índice de continuaciones n-grama a partir del corpus completo.
 
-        # Construir grafo de transiciones
+        Para cada posición registra el siguiente token bajo cada contexto de longitud
+        0..(max_pattern_length-1). El contexto vacío () es la distribución unigrama, que
+        sirve como nivel final de backoff. Coste O(tokens × max_pattern_length): lineal,
+        frente al O(tokens × patrones) del antiguo grafo de transiciones.
+        """
+        self.ngram_index = defaultdict(Counter)
+        max_ctx = max(self.max_pattern_length - 1, 0)
+
         for text in texts:
             tokens = self._smart_tokenize(text)
-
-            # Encontrar patrones en el texto
-            pattern_positions = []
             for i in range(len(tokens)):
-                for pattern in patterns:
-                    pattern_tokens = pattern.split()
-                    if (i + len(pattern_tokens) <= len(tokens) and
-                        " ".join(tokens[i:i+len(pattern_tokens)]) == pattern):
-                        pattern_positions.append((i, i + len(pattern_tokens), pattern))
+                target = tokens[i]
+                self.ngram_index[()][target] += 1  # unigrama (backoff final)
+                for k in range(1, max_ctx + 1):
+                    if i - k >= 0:
+                        ctx = tuple(tokens[i - k:i])
+                        self.ngram_index[ctx][target] += 1
 
-            # Construir transiciones
-            for i, (start1, end1, pattern1) in enumerate(pattern_positions):
-                for start2, end2, pattern2 in pattern_positions[i+1:]:
-                    if start2 >= end1 and start2 - end1 <= 3:  # Proximidad razonable
-                        # Encontrar palabra/token de transición
-                        if start2 == end1:
-                            transition = "__DIRECT__"
-                        else:
-                            transition = " ".join(tokens[end1:start2])
+    def _backoff_scores(self, context_tokens: List[str]) -> Dict[str, float]:
+        """Distribución de continuaciones por backoff de n variable.
 
-                        if pattern1 not in self.pattern_graph:
-                            self.pattern_graph[pattern1] = defaultdict(int)
-                        self.pattern_graph[pattern1][transition + " -> " + pattern2] += 1
+        Interpola los niveles de n disponibles dando más peso a los contextos más largos
+        (factor geométrico `_BACKOFF_FACTOR`). El nivel unigrama garantiza cobertura
+        siempre que algún token haya sido visto. Coste O(max_pattern_length) por consulta.
+        """
+        scores = defaultdict(float)
+        upper = min(max(self.max_pattern_length - 1, 0), len(context_tokens))
+        weight = 1.0
+        for k in range(upper, -1, -1):
+            ctx = tuple(context_tokens[len(context_tokens) - k:]) if k > 0 else ()
+            counter = self.ngram_index.get(ctx)
+            if counter:
+                total = sum(counter.values())
+                for token, count in counter.items():
+                    scores[token] += weight * (count / total)
+            weight *= self._BACKOFF_FACTOR
+        return scores
 
-    def _create_compact_embeddings(self, patterns: Dict[str, int]) -> None:
-        """Crea embeddings ultra-compactos (8 dimensiones vs 4096)"""
-        # Extraer vocabulario único
-        vocabulary = set()
-        for pattern in patterns:
-            vocabulary.update(pattern.split())
-
-        # Crear embeddings compactos usando hash + distribución normal
-        for word in vocabulary:
-            # Seed determinístico basado en la palabra
-            word_hash = hash(word) % (2**31)
-            random.seed(word_hash)
-
-            # Vector de 8 dimensiones
-            vector = [random.gauss(0, 0.5) for _ in range(8)]
-            self.word_vectors[word] = vector
+    def _penalize_and_sample(self, scores: Dict[str, float], context_tokens: List[str],
+                             temperature: float) -> Optional[str]:
+        """Aplica anti-repetición y muestrea un token de la distribución dada."""
+        if not scores:
+            return None
+        recent_6 = set(context_tokens[-6:])
+        recent_10 = set(context_tokens[-10:])
+        penalized = {}
+        for candidate, score in scores.items():
+            if candidate in recent_6:
+                score *= 0.3
+            elif candidate in recent_10:
+                score *= 0.5
+            penalized[candidate] = score
+        return self._sample_with_temperature(penalized, temperature)
 
     def generate(self, prompt: str, max_length: int = 20, temperature: float = 0.7) -> str:
-        """Generación ultra-rápida activando solo patrones relevantes"""
+        """Generación ultra-rápida usando el índice n-grama con backoff de n variable."""
         start_time = time.time()
         self.stats['total_generations'] += 1
 
-        # Tokenizar prompt
         result_tokens = self._smart_tokenize(prompt)
         activations_this_gen = 0
-        
+
         # Asegurar que generamos al menos algunos tokens adicionales
         min_generated = max(3, max_length // 2)
         generated_count = 0
+        max_ctx = max(self.max_pattern_length - 1, 1)
 
         for step in range(max_length):
-            # Obtener contexto reciente
-            context = " ".join(result_tokens[-8:])  # Ventana de contexto ampliada
+            context_tokens = result_tokens[-max_ctx:]
 
-            # Activar solo patrones relevantes
-            active_patterns = self._get_active_patterns(context)
-            activations_this_gen += len(active_patterns)
+            # Candidatos por backoff: solo se consideran los tokens realmente vistos
+            # tras este contexto (activación dispersa real, no escaneo de todos los patrones).
+            scores = self._backoff_scores(context_tokens)
+            activations_this_gen += len(scores)
 
-            # Si no hay patrones activos y ya generamos suficiente, parar
-            if not active_patterns and generated_count >= min_generated:
+            if not scores:
                 break
 
-            # Predecir siguiente token usando solo patrones activos
-            next_token = self._predict_next_token(context, active_patterns, temperature)
-
+            next_token = self._penalize_and_sample(scores, context_tokens, temperature)
             if next_token is None:
-                # Si no podemos predecir, intentar con patrones más generales
-                if generated_count < min_generated:
-                    # Buscar patrones que contengan palabras del prompt
-                    prompt_words = set(prompt.lower().split())
-                    for pattern, freq in self.patterns.items():
-                        pattern_words = set(pattern.lower().split())
-                        if any(word in pattern_words for word in prompt_words):
-                            pattern_tokens = pattern.split()
-                            if len(pattern_tokens) > len(result_tokens):
-                                next_token = pattern_tokens[len(result_tokens)]
-                                break
-                
-                if next_token is None:
-                    break
+                break
 
             result_tokens.append(next_token)
             generated_count += 1
 
         generation_time = time.time() - start_time
-        # Only update activations if there were any active patterns
         if activations_this_gen > 0:
-             self.stats['activations_per_generation'] += activations_this_gen
+            self.stats['activations_per_generation'] += activations_this_gen
 
         result = " ".join(result_tokens)
 
-        # Log de eficiencia
+        # Log de eficiencia: sparsity = fracción de candidatos NO considerados respecto al
+        # total de tokens distintos del vocabulario (ahora es una medida real de la activación).
         tokens_per_second = len(result_tokens) / (generation_time + 0.001)
-        # Calculate sparsity based on total activations over all generations
-        total_possible_activations = self.stats['total_generations'] * len(self.patterns) if self.patterns else 1
-        sparsity = 1 - (self.stats['activations_per_generation'] / total_possible_activations) if total_possible_activations > 0 else 0
+        vocab_size = len(self.ngram_index.get((), {})) or 1
+        avg_candidates = activations_this_gen / max(generated_count, 1)
+        sparsity = 1 - (avg_candidates / vocab_size)
 
         print(f"⚡ Generado en {generation_time:.3f}s | {tokens_per_second:.0f} tokens/s | Sparsity: {sparsity:.1%}")
 
@@ -474,77 +480,26 @@ class UltraEfficientLLM:
 
         return top_active
 
-    def _predict_next_token(self, context: str, active_patterns: List[Tuple[str, float]],
-                           temperature: float) -> Optional[str]:
-        """Predicción usando solo patrones activos con anti-repetición"""
-        candidates = defaultdict(float)
-        context_words = context.lower().split()
+    def next_token_distribution(self, context: str) -> Dict[str, float]:
+        """Distribución de probabilidad normalizada del siguiente token dado el contexto.
 
-        # Penalize words in the last 6 and 10 words of the context
-        recent_words_6 = set(context_words[-6:])
-        recent_words_10 = set(context_words[-10:])
+        Usa el backoff de n variable sobre el índice n-grama. Sin penalizaciones ni
+        aleatoriedad: representa lo que el modelo "cree" sobre la siguiente palabra.
+        Devuelve {} si ningún token fue visto (el evaluador aplica un piso de probabilidad).
+        """
+        tokens = self._smart_tokenize(context)
+        scores = self._backoff_scores(tokens)
+        total = sum(scores.values())
+        if total <= 0:
+            return {}
+        return {token: score / total for token, score in scores.items()}
 
-        for pattern, activation_score in active_patterns:
-            # Look for possible continuations from the pattern graph
-            if pattern in self.pattern_graph:
-                for transition, count in self.pattern_graph[pattern].items():
-                    if " -> " in transition:
-                        bridge, next_pattern = transition.split(" -> ", 1)
-                        next_words = next_pattern.split()
-
-                        if next_words:
-                            candidate = next_words[0]
-
-                            # ANTI-REPETITION: Penalize recent words
-                            repetition_penalty = 1.0
-                            if candidate in recent_words_6:
-                                repetition_penalty = 0.3
-                            elif candidate in recent_words_10:
-                                repetition_penalty = 0.5
-
-                            score = activation_score * count * repetition_penalty
-                            candidates[candidate] += score
-
-            # Also consider direct extensions of the pattern
-            pattern_words = pattern.split()
-            if len(pattern_words) > 0: # Ensure pattern is not empty
-                 for other_pattern in self.patterns:
-                     other_words = other_pattern.split()
-                     if (len(other_words) > len(pattern_words) and
-                         other_words[:len(pattern_words)] == pattern_words):
-
-                         next_word = other_words[len(pattern_words)]
-
-                         # ANTI-REPETITION applied here as well
-                         repetition_penalty = 1.0
-                         if next_word in recent_words_6:
-                             repetition_penalty = 0.3
-                         elif next_word in context_words[-10:]:
-                             repetition_penalty = 0.5
-
-                         # Adjust scoring for direct extensions - prioritize longer, more frequent extensions
-                         extension_score_factor = self.patterns.get(other_pattern, 0) / max(self.patterns.get(pattern, 1), 1) # Prevent division by zero
-                         score = activation_score * extension_score_factor * 10.0 * repetition_penalty # Boost this pathway
-                         candidates[next_word] += score
-
-        # DIVERSIDAD: If very few candidates, add random words from vocabulary
-        if len(candidates) < 3:
-            vocab_words = list(self.word_vectors.keys())
-            # Avoid adding words that are already very close in the extended context
-            recent_context_set = set(context_words[-8:])
-            added_count = 0
-            for _ in range(5): # Try adding up to 5 random words
-                if added_count >= 3: break
-                random_word = random.choice(vocab_words)
-                if random_word not in candidates and random_word not in recent_context_set:
-                     candidates[random_word] = 0.01  # Very low score
-                     added_count += 1
-
-        if not candidates:
-            return None
-
-        # Apply temperature and sampling
-        return self._sample_with_temperature(candidates, temperature)
+    def _predict_next_token(self, context: str, temperature: float = 0.7) -> Optional[str]:
+        """Predice el siguiente token (backoff + anti-repetición + muestreo)."""
+        tokens = self._smart_tokenize(context)
+        context_tokens = tokens[-max(self.max_pattern_length - 1, 1):]
+        scores = self._backoff_scores(context_tokens)
+        return self._penalize_and_sample(scores, context_tokens, temperature)
 
     def _sample_with_temperature(self, candidates: Dict[str, float], temperature: float) -> str:
         """Sampling con temperatura"""
@@ -614,20 +569,13 @@ class UltraEfficientLLM:
         total_size += sum(sys.getsizeof(p) for p in self.patterns.keys())
         total_size += sum(sys.getsizeof(f) for f in self.patterns.values())
 
-        # Tamaño del grafo
-        total_size += sys.getsizeof(self.pattern_graph)
-        for pattern, next_words_dict in self.pattern_graph.items():
-             total_size += sys.getsizeof(pattern) # Size of the key
-             total_size += sys.getsizeof(next_words_dict) # Size of the inner dict
-             total_size += sum(sys.getsizeof(k) for k in next_words_dict.keys()) # Size of transition keys
-             total_size += sum(sys.getsizeof(v) for v in next_words_dict.values()) # Size of counts
-
-        # Tamaño de embeddings
-        total_size += sys.getsizeof(self.word_vectors)
-        for word, vector in self.word_vectors.items():
-             total_size += sys.getsizeof(word) # Size of the key
-             total_size += sys.getsizeof(vector) # Size of the vector list
-             total_size += sum(sys.getsizeof(item) for item in vector) # Size of floats
+        # Tamaño del índice n-grama
+        total_size += sys.getsizeof(self.ngram_index)
+        for ctx, counter in self.ngram_index.items():
+             total_size += sys.getsizeof(ctx)
+             total_size += sys.getsizeof(counter)
+             total_size += sum(sys.getsizeof(k) for k in counter.keys())
+             total_size += sum(sys.getsizeof(v) for v in counter.values())
 
         # Tamaño de cache (can be variable)
         total_size += sys.getsizeof(self.activation_cache)

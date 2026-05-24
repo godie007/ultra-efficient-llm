@@ -1,3 +1,8 @@
+> ⚠️ **Documento histórico.** Describe el motor n-grama con el encuadre original
+> ("razonamiento", comparaciones con GPT). Ese encuadre ya no es válido: un modelo de
+> n-gramas no es un LLM y no generaliza. Para el estado actual (híbrido n-grama + neuronal
+> + RAG) y métricas honestas, ver el [README principal](../README.md).
+
 # 🧠 ¿CÓMO FUNCIONA EL RAZONAMIENTO DE TU ULTRAEFFICIENTLLM?
 
 ## 🎯 **El Paradigma Revolucionario**

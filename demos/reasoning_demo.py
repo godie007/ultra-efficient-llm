@@ -157,7 +157,7 @@ class ReasoningDemo:
                     print(f"     {i}. '{pattern}' (score: {score:.3f})")
                 
                 # Predecir siguiente token
-                next_token = self.model._predict_next_token(context, active_patterns, 0.7)
+                next_token = self.model._predict_next_token(context, 0.7)
                 if next_token:
                     result_tokens.append(next_token)
                     print(f"   → Predicción: '{next_token}'")

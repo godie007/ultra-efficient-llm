@@ -1,48 +1,27 @@
-# 🚀 Demos del UltraEfficientLLM
+# Demos
 
-Este directorio contiene todas las demostraciones y ejemplos del UltraEfficientLLM.
+Demostraciones del **motor n-grama**. Ejecútalas desde la raíz del repo con `PYTHONUTF8=1`
+en Windows.
 
-## 📁 Archivos Incluidos
+## Archivos
 
-### **reasoning_demo.py**
-- **Propósito**: Demostración del proceso de razonamiento interno del LLM
-- **Funcionalidades**:
-  - Extracción de patrones
-  - Activación selectiva
-  - Cadena de razonamiento
-  - Métricas de eficiencia
-- **Uso**: `python reasoning_demo.py --full`
+- **reasoning_demo.py** — visualiza el proceso interno del motor n-grama (extracción de
+  patrones, patrones activos, predicción paso a paso). `python demos/reasoning_demo.py --full`
+- **large_training_demo.py** — entrenamiento con más datos y comparación entre tamaños de modelo.
+- **simple_email_generator.py** — generador de correos basado en plantillas + el motor n-grama.
 
-### **large_training_demo.py**
-- **Propósito**: Entrenamiento a gran escala del modelo
-- **Funcionalidades**:
-  - 253 frases de entrenamiento
-  - 5 categorías (Técnico, Email, Casual, Narrativo, Instrucciones)
-  - 10,000 patrones extraídos
-  - Comparación con modelo pequeño
-- **Uso**: `python large_training_demo.py --full`
+## Demos de la arquitectura actual (híbrido + RAG)
 
-### **simple_email_generator.py**
-- **Propósito**: Generador de correos electrónicos profesionales
-- **Funcionalidades**:
-  - Plantillas predefinidas
-  - Personalización contextual
-  - Múltiples tonos (formal, casual, seguimiento)
-  - Generación en español
-- **Uso**: `python simple_email_generator.py`
+Estas viven en `src/` porque dependen del backbone neuronal opcional
+(`pip install -r requirements-neural.txt`):
 
-## 🎯 Cómo Usar
+```bash
+PYTHONUTF8=1 python src/evaluation.py   # perplejidad + comparación n-grama vs neuronal vs híbrido
+PYTHONUTF8=1 python src/rag.py          # recuperación semántica + generación few-shot
+```
 
-1. **Para ver el razonamiento**: `python reasoning_demo.py --full`
-2. **Para entrenamiento grande**: `python large_training_demo.py --full`
-3. **Para generar emails**: `python simple_email_generator.py`
+## Nota
 
-## 📊 Resultados Esperados
-
-- **Razonamiento**: Visualización del proceso interno del LLM
-- **Entrenamiento**: Mejora significativa con más datos
-- **Emails**: Correos profesionales bien estructurados
-
----
-
-**Nota**: Todos los demos están diseñados para mostrar las capacidades únicas del UltraEfficientLLM en términos de eficiencia, escalabilidad y razonamiento. 
+Los demos del motor n-grama muestran sus límites reales: genera recombinando lo visto y **no
+generaliza**. La generación coherente requiere el componente neuronal (ver `src/hybrid.py`,
+`src/rag.py`). Ver el [README principal](../README.md).

@@ -1,3 +1,7 @@
+> ⚠️ **Documento histórico.** Instrucciones de una etapa anterior del motor n-grama. Varios
+> detalles (umbrales de activación, fallbacks) cambiaron al reescribir el motor con índice de
+> continuaciones + backoff. Para el estado actual, ver el [README principal](../README.md).
+
 # 🎉 ¡SISTEMA MEJORADO Y FUNCIONANDO! - Instrucciones Finales
 
 ## ✅ **Mejoras Implementadas**

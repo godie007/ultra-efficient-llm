@@ -135,30 +135,34 @@ def format_memory(bytes_value: float) -> str:
 
 def print_efficiency_report(metrics: Dict[str, Any]) -> None:
     """
-    Imprime reporte de eficiencia formateado
-    
+    Imprime un reporte de RECURSOS del motor n-grama (memoria, velocidad, sparsity).
+
+    No es una métrica de CALIDAD: la calidad real se mide con perplejidad
+    (ver src/evaluation.py). Acepta tanto la salida de get_efficiency_report()
+    como la de get_efficiency_metrics().
+
     Args:
-        metrics: Métricas de eficiencia
+        metrics: Métricas de recursos del modelo
     """
     print("\n" + "="*60)
-    print("📊 REPORTE DE EFICIENCIA ULTRA-EFICIENTE")
+    print("📊 RECURSOS DEL MOTOR N-GRAMA")
     print("="*60)
-    
-    print(f"💾 Memoria utilizada: {metrics['memory_usage_mb']:.2f} MB")
-    print(f"🚀 Mejora vs LLM tradicional: {metrics['memory_improvement_vs_traditional']}")
-    print(f"⚡ Velocidad estimada: {metrics['estimated_tokens_per_second']} tokens/s")
-    print(f"🎯 Sparsity lograda: {metrics['sparsity_achieved']}")
-    print(f"🔥 Cache hit rate: {metrics['cache_hit_rate']}")
-    print(f"💡 Activaciones promedio por generación: {metrics['average_activations_per_generation']}")
-    print(f"🧮 Patrones almacenados: {metrics['total_patterns_stored']}")
-    print(f"🔄 Total de generaciones: {metrics['total_generations']}")
-    
-    print("\n🎉 COMPARACIÓN CON MODELOS TRADICIONALES:")
-    print(f"   📊 Memoria: {metrics['memory_usage_mb']:.0f} MB vs 14,000 MB (GPT-3.5)")
-    print(f"   ⚡ Velocidad: ~{metrics['estimated_tokens_per_second']} tokens/s vs ~20 tokens/s")
-    print(f"   💻 Hardware: Cualquier PC vs GPU especializada")
-    print(f"   🔋 Energía: <1W vs >300W")
-    
+
+    if 'memory_usage_mb' in metrics:
+        print(f"💾 Memoria: {metrics['memory_usage_mb']:.2f} MB")
+    elif 'memory_kb' in metrics:
+        print(f"💾 Memoria: {metrics['memory_kb']:.2f} KB")
+
+    patterns = metrics.get('patterns_stored', metrics.get('total_patterns_stored'))
+    if patterns is not None:
+        print(f"🧮 Patrones almacenados: {patterns}")
+
+    if 'sparsity_achieved' in metrics:
+        print(f"🎯 Sparsity: {metrics['sparsity_achieved']}")
+    if 'cache_hit_rate' in metrics:
+        print(f"🔥 Cache hit rate: {metrics['cache_hit_rate']}")
+
+    print("\nℹ️  Métricas de recursos, no de calidad. Perplejidad: src/evaluation.py")
     print("="*60)
 
 

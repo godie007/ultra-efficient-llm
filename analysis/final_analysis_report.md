@@ -1,3 +1,8 @@
+> ⚠️ **Documento histórico.** Reporte de una etapa anterior, con el encuadre de "LLM
+> revolucionario" y comparaciones con GPT que ya no son válidas (un n-grama no es un LLM y
+> no generaliza). Para el estado actual y la evaluación honesta (perplejidad), ver el
+> [README principal](../README.md) y `src/evaluation.py`.
+
 # 📊 ANÁLISIS FINAL COMPLETO: ULTRAEFFICIENTLLM
 
 ## 🎯 RESUMEN EJECUTIVO

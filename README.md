@@ -1,226 +1,107 @@
-# 🚀 UltraEfficientLLM - Modelo de Lenguaje Ultra-Eficiente
+# UltraEfficientLLM
 
-Un modelo de lenguaje revolucionario que combina eficiencia extrema con capacidades de razonamiento avanzadas, utilizando solo **13.6 MB de memoria** vs los 14GB de GPT tradicionales.
+Proyecto de investigación sobre **generación de lenguaje eficiente y con pocos datos**.
+La meta: dar ejemplos al sistema y que *conecte conceptos* sin entrenar un modelo gigante,
+optimizando entrenamiento, velocidad de respuesta y cantidad de datos necesarios.
 
-## 🎯 Características Principales
+> ⚠️ **Nota honesta sobre el origen del proyecto.** Empezó como un "LLM ultra-eficiente"
+> basado en n-gramas con afirmaciones de marketing (13.6 MB vs 14 GB de GPT, 99.9 % de
+> sparsity, "razonamiento transparente"). Tras una evaluación técnica, la conclusión fue
+> clara: **un modelo de n-gramas no es un LLM y no generaliza** (es la tecnología dominante
+> de los años 90, abandonada por sus límites: dispersión de datos, cero generalización
+> semántica, sin dependencias de largo alcance). Las viejas comparaciones contra GPT eran
+> inválidas porque comparaban una tabla de n-gramas con un transformer de 175 000 M de
+> parámetros. El proyecto se reorientó hacia algo que **sí** tiene respaldo técnico.
 
-### ⚡ **Eficiencia Revolucionaria**
-- **Memoria**: Solo 13.6 MB vs 14GB de GPT
-- **Sparsity**: 99.9% de patrones inactivos
-- **Velocidad**: 100+ tokens/s en generación
-- **Escalabilidad**: Maneja 10,000+ patrones eficientemente
+## Qué es ahora
 
-### 🧠 **Razonamiento Transparente**
-- **4 Pilares**: Extracción → Grafo → Activación → Predicción
-- **Visibilidad**: Proceso interno observable
-- **Interpretabilidad**: Caminos de razonamiento claros
-- **Adaptabilidad**: Se ajusta a diferentes dominios
+Una arquitectura híbrida en tres capas, de lo barato a lo potente:
 
-### 🎯 **Aplicaciones Prácticas**
-- **Generación de Emails**: Calidad profesional
-- **Análisis de Texto**: Extracción de patrones
-- **Procesamiento Eficiente**: Bajo consumo de recursos
+1. **Motor n-grama** (`src/ultra_efficient_llm.py`) — índice de continuaciones con *backoff*
+   de n variable (estilo Infini-gram). Recall exacto y barato sobre lo visto, en tiempo
+   sublineal. Solo, no generaliza.
+2. **Híbrido n-grama + neuronal** (`src/hybrid.py`, `src/neural_backbone.py`) — interpola la
+   distribución del n-grama con la de un modelo neuronal pequeño (distilgpt2 por defecto).
+   El n-grama aporta recall exacto; el neuronal, generalización.
+3. **Recuperación semántica + RAG** (`src/semantic_memory.py`, `src/rag.py`) — guarda ejemplos
+   como embeddings y recupera los conceptualmente relevantes a una consulta (aunque no
+   compartan palabras); se los pasa al modelo en contexto (*few-shot*). Añadir o quitar
+   conocimiento = añadir o quitar ejemplos, **sin reentrenar**.
 
----
+## Resultados medidos (honestos)
 
-## 📁 Estructura del Proyecto
+Perplejidad sobre **texto no visto** (más baja = mejor):
 
-```
-custom-llm/
-├── 📚 docs/                    # Documentación técnica
-│   ├── README.md
-│   └── llm_reasoning_explanation.md
-├── 🚀 demos/                   # Demostraciones y ejemplos
-│   ├── README.md
-│   ├── reasoning_demo.py
-│   ├── large_training_demo.py
-│   └── simple_email_generator.py
-├── 📊 analysis/                # Reportes de análisis
-│   ├── README.md
-│   ├── large_training_analysis.md
-│   ├── llm_reasoning_summary.md
-│   ├── email_generator_summary.md
-│   └── final_analysis_report.md
-├── 📤 outputs/                 # Archivos de salida
-│   ├── README.md
-│   ├── demo_emails.txt
-│   └── correos_simples.txt
-├── 📈 evaluation_reports/      # Métricas detalladas
-│   ├── performance_report_*.json
-│   ├── scalability_report_*.json
-│   └── quality_report_*.json
-├── 🧠 src/                     # Código fuente principal
-│   ├── ultra_efficient_llm.py
-│   ├── data_processor.py
-│   └── utils.py
-├── 📖 examples/                # Ejemplos básicos
-├── 🧪 tests/                   # Pruebas unitarias
-├── 📊 data/                    # Datos de entrenamiento
-└── 📦 models/                  # Modelos guardados
-```
+| Modelo | Perplejidad |
+|---|---|
+| N-grama solo | ~413 000 (no generaliza) |
+| Neuronal solo (distilgpt2) | ~194 |
+| **Híbrido n-grama + neuronal** | **~99** ✅ mejor que cualquiera de los dos |
 
----
+Esto reproduce el resultado de Infini-gram (2024): interpolar n-gramas con un LM neuronal
+reduce la perplejidad. La recuperación semántica conecta consultas con ejemplos relevantes
+**sin solapamiento léxico** (p. ej. "How do machines learn?" → ejemplos de redes neuronales).
 
-## 🚀 Inicio Rápido
+## Instalación
 
-### **1. Instalación**
 ```bash
-git clone <repository>
-cd custom-llm
-pip install -r requirements.txt
+pip install -r requirements.txt            # base: solo el motor n-grama
+pip install -r requirements-neural.txt     # opcional: híbrido + RAG (torch + transformers)
 ```
 
-### **2. Demo de Razonamiento**
+El motor n-grama funciona sin las dependencias neuronales. Para GPU (p. ej. RTX 4060 Ti),
+instala el build de `torch` con CUDA desde https://pytorch.org. El backbone neuronal y la
+memoria semántica detectan la GPU automáticamente.
+
+> En Windows, ejecuta con `PYTHONUTF8=1` (la consola cp1252 no imprime los emojis del log):
+> `PYTHONUTF8=1 python main.py --test`
+
+## Uso
+
 ```bash
-cd demos
-python reasoning_demo.py --full
+# Tests (los tests neuronales se omiten salvo RUN_NEURAL_TESTS=1)
+PYTHONUTF8=1 python main.py --test
+RUN_NEURAL_TESTS=1 PYTHONUTF8=1 python main.py --test   # incluye híbrido + RAG
+
+# Evaluación honesta: perplejidad, velocidad y comparación n-grama vs neuronal vs híbrido
+PYTHONUTF8=1 python src/evaluation.py
+
+# Demo de recuperación semántica + generación few-shot (RAG)
+PYTHONUTF8=1 python src/rag.py
+
+# Demos del motor n-grama
+python main.py                 # demo con libro (descarga Frankenstein)
+python main.py --basic         # demo con textos de ejemplo
+python main.py --interactive   # modo interactivo
 ```
 
-### **3. Entrenamiento a Gran Escala**
+Aplicación web (FastAPI + React) para entrenar/evaluar el motor n-grama:
+
 ```bash
-cd demos
-python large_training_demo.py --full
+cd web_app/backend && python start.py     # http://localhost:8000  (docs en /api/docs)
+cd web_app/frontend && npm install && npm run dev   # http://localhost:5173
 ```
 
-### **4. Generador de Emails**
-```bash
-cd demos
-python simple_email_generator.py
-```
+## Arquitectura del código
 
----
+| Módulo | Rol |
+|---|---|
+| `src/ultra_efficient_llm.py` | Motor n-grama: extracción de patrones, índice de continuaciones, backoff, generación. |
+| `src/evaluation.py` | Métricas reales: perplejidad, velocidad, comparación de modelos. |
+| `src/neural_backbone.py` | Modelo neuronal pequeño (distilgpt2) — distribución del siguiente token y generación. |
+| `src/hybrid.py` | `HybridLLM`: interpola n-grama + neuronal. |
+| `src/semantic_memory.py` | Memoria de ejemplos por embeddings (all-MiniLM-L6-v2) + recuperación por coseno. |
+| `src/rag.py` | `RAGGenerator`: recupera ejemplos relevantes y genera condicionado a ellos. |
+| `src/data_processor.py`, `src/utils.py` | Descarga/limpieza de corpus y utilidades. |
+| `web_app/` | API FastAPI + frontend React sobre el motor n-grama. |
 
-## 📊 Resultados Destacados
+## Estado y próximos pasos
 
-### **🎯 Entrenamiento a Gran Escala**
-- **253 frases** de entrenamiento
-- **10,000 patrones** extraídos
-- **17.8x mejora** en diversidad semántica
-- **15.64 segundos** de entrenamiento
+- El cuello de botella de calidad es el modelo base (distilgpt2, mínimo). Cambiarlo por un
+  modelo instruido pequeño (Qwen2.5-0.5B, Gemma) mejora mucho el *few-shot*.
+- LoRA para adaptación a dominio en GPU (eficiencia de entrenamiento).
+- Benchmark con corpus real y conjuntos de validación más grandes.
 
-### **⚡ Métricas de Eficiencia**
-- **Sparsity**: 99.9% (solo 0.1% activos)
-- **Memoria**: 13.6 MB vs 14GB GPT
-- **Velocidad**: 100+ tokens/s
-- **Patrones**: 10,000 vs 175B parámetros
+## Licencia
 
-### **📧 Aplicación Práctica**
-- **Generación de Emails**: Calidad profesional
-- **Personalización**: Adaptación contextual
-- **Múltiples Tonos**: Formal, casual, seguimiento
-- **Idioma**: Español e inglés
-
----
-
-## 🧠 Cómo Funciona
-
-### **1. 🧩 Extracción de Patrones**
-- Tokenización inteligente que preserva entidades semánticas
-- Filtrado por utilidad (frecuencia + información mutua)
-- Extracción paralela usando múltiples núcleos CPU
-
-### **2. 🕸️ Grafo de Patrones**
-- Estructura que conecta patrones relacionados
-- Representa "caminos de razonamiento"
-- Permite navegación semántica entre conceptos
-
-### **3. ⚡ Activación Selectiva**
-- Solo patrones relevantes al contexto se activan
-- 99.9% de patrones permanecen inactivos
-- Uso mínimo de memoria y procesamiento
-
-### **4. 🎯 Predicción Inteligente**
-- Generación basada en patrones activos
-- Combinación de frecuencia y similitud semántica
-- Control de temperatura y anti-repetición
-
----
-
-## 📈 Comparación con Modelos Tradicionales
-
-| Aspecto | UltraEfficientLLM | GPT-3 | Mejora |
-|---------|-------------------|-------|---------|
-| **Memoria** | 13.6 MB | 14 GB | 1,000x |
-| **Sparsity** | 99.9% | 0% | ∞ |
-| **Velocidad** | 100+ tokens/s | ~10 tokens/s | 10x |
-| **Transparencia** | Completa | Limitada | ∞ |
-| **Escalabilidad** | 10,000 patrones | 175B parámetros | Eficiente |
-
----
-
-## 🎯 Casos de Uso
-
-### **📧 Generación de Emails Profesionales**
-- Plantillas predefinidas + personalización
-- Múltiples tonos y contextos
-- Calidad profesional garantizada
-
-### **🧠 Análisis de Razonamiento**
-- Visualización del proceso interno
-- Identificación de patrones activos
-- Trazabilidad completa
-
-### **📊 Evaluación de Escalabilidad**
-- Entrenamiento con grandes volúmenes
-- Comparación de modelos
-- Métricas de rendimiento
-
----
-
-## 📚 Documentación
-
-### **📖 Guías Principales**
-- **[Documentación Técnica](docs/)** - Explicación completa del modelo
-- **[Demos](demos/)** - Ejemplos prácticos y demostraciones
-- **[Análisis](analysis/)** - Reportes de evaluación detallados
-- **[Outputs](outputs/)** - Resultados generados
-
-### **🔬 Análisis Técnico**
-- **[Razonamiento](docs/llm_reasoning_explanation.md)** - Mecanismo interno
-- **[Entrenamiento Grande](analysis/large_training_analysis.md)** - Escalabilidad
-- **[Generador de Emails](analysis/email_generator_summary.md)** - Aplicación práctica
-
----
-
-## 🚀 Próximos Pasos
-
-### **🎯 Mejoras Técnicas**
-- Activación múltiple de patrones
-- Anti-repetición mejorado
-- Ventana de contexto expandida
-- Patrones gramaticales
-
-### **📊 Escalabilidad**
-- 50,000+ patrones
-- Optimización de memoria
-- Paralelización avanzada
-
-### **🧠 Inteligencia**
-- Más dominios especializados
-- Conexiones semánticas mejoradas
-- Razonamiento lógico
-- Memoria de contexto
-
----
-
-## 🤝 Contribuciones
-
-¡Las contribuciones son bienvenidas! Por favor:
-
-1. **Fork** el repositorio
-2. **Crea** una rama para tu feature
-3. **Commit** tus cambios
-4. **Push** a la rama
-5. **Abre** un Pull Request
-
----
-
-## 📄 Licencia
-
-Este proyecto está bajo la Licencia MIT. Ver [LICENSE](LICENSE) para más detalles.
-
----
-
-**¡El UltraEfficientLLM representa un avance revolucionario en eficiencia y escalabilidad de modelos de lenguaje!** 🚀✨
-
-**¿Listo para explorar el futuro de la IA eficiente?** 🧠⚡ 
+MIT. Ver [LICENSE](LICENSE).

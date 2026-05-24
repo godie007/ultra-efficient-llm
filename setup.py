@@ -42,6 +42,10 @@ setup(
     python_requires=">=3.8",
     install_requires=read_requirements(),
     extras_require={
+        "neural": [
+            "torch>=2.0",
+            "transformers>=4.40",
+        ],
         "dev": [
             "pytest>=6.0",
             "pytest-cov>=2.0",

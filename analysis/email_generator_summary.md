@@ -1,3 +1,6 @@
+> ⚠️ **Documento histórico.** Describe el generador de emails (plantillas + motor n-grama)
+> de una etapa anterior. Para el estado actual del proyecto, ver el [README principal](../README.md).
+
 # 📧 GENERADOR DE CORREOS CON ULTRAEFFICIENTLLM
 
 ## 🎯 **¿Qué Hemos Creado?**

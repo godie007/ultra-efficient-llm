@@ -1,3 +1,7 @@
+> ⚠️ **Documento histórico.** Resume un demo del motor n-grama con el encuadre antiguo
+> ("razonamiento", sparsity 99.9 %). Ya no es válido: un n-grama no razona ni generaliza.
+> Para el estado actual, ver el [README principal](../README.md).
+
 # 🧠 RESUMEN: EL RAZONAMIENTO DE TU ULTRAEFFICIENTLLM
 
 ## 🎯 **Lo Que Acabamos de Ver**

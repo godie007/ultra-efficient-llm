@@ -1,3 +1,7 @@
+> ⚠️ **Documento histórico.** Reporte de una etapa anterior con el encuadre antiguo
+> (comparaciones con GPT, "sparsity" como si fuera calidad). Ya no es válido. Para el estado
+> actual y métricas honestas, ver el [README principal](../README.md) y `src/evaluation.py`.
+
 # 📊 ANÁLISIS: Entrenamiento a Gran Escala del UltraEfficientLLM
 
 ## 🎯 **Resultados del Entrenamiento Grande**

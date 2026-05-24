@@ -158,7 +158,7 @@ def run_inference_mode(args):
         print(f"\n📊 Información del modelo:")
         print(f"   ✅ Entrenado: {info['is_trained']}")
         print(f"   🧮 Patrones: {info['patterns_count']}")
-        print(f"   📊 Embeddings: {info['word_vectors_count']}")
+        print(f"   🔗 Contextos n-grama: {info['ngram_contexts']}")
         print(f"   💾 Memoria: {info['memory_usage_kb']:.2f} KB")
         
         if args.prompt:
@@ -262,31 +262,25 @@ def run_book_demo(args):
             generated = model.generate(prompt, max_length=50, temperature=0.9)
             print(f"🎯 Generated: '{generated}'")
         
-        # Reporte final de eficiencia
+        # Reporte de recursos del motor n-grama
         print("\n" + "="*60)
-        print("📊 REPORTE FINAL DE EFICIENCIA")
+        print("📊 RECURSOS DEL MOTOR N-GRAMA")
         print("="*60)
-        
+
         report = model.get_efficiency_report()
         print_efficiency_report(report)
-        
-        # Comparación con modelos tradicionales
-        print("\n🎉 COMPARACIÓN REVOLUCIONARIA:")
-        print(f"   📊 Memoria: {report['memory_kb']:.0f} KB vs 14,000,000 KB (GPT-3.5)")
-        print(f"   ⚡ Velocidad: ~500 tokens/s vs ~20 tokens/s")
-        print(f"   💻 Hardware: Cualquier PC vs GPU especializada")
-        print(f"   🔋 Energía: <1W vs >300W")
-        print(f"   💰 Costo: Gratis vs $0.002/token")
-        
+
+        print("\nℹ️  Recuerda: el motor n-grama recombina lo visto y NO generaliza.")
+        print("   Para calidad real (perplejidad) y el híbrido neuronal: python src/evaluation.py")
+
         # Instrucciones para reutilizar el modelo
         if args.save_model:
             print(f"\n💡 Para reutilizar este modelo:")
             print(f"   python main.py --inference --load-model {args.save_model}")
             print(f"   python main.py --inference --load-model {args.save_model} --prompt 'Tu prompt aquí'")
-        
+
         print("\n" + "="*60)
-        print("✅ ¡ALGORITMO ULTRA-EFICIENTE FUNCIONANDO PERFECTAMENTE!")
-        print("🌟 Revolucionando el procesamiento de lenguaje natural")
+        print("✅ Demo del motor n-grama completado")
         print("="*60)
         
         return 0

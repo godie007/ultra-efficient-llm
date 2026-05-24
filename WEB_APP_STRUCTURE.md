@@ -1,8 +1,15 @@
 # 🌐 Estructura Completa de la Aplicación Web UltraEfficientLLM
 
+> ℹ️ **Alcance actual.** La app web opera sobre el **motor n-grama** (`src/ultra_efficient_llm.py`),
+> no sobre el híbrido neuronal ni RAG. Las métricas que muestra (patrones, memoria, "sparsity")
+> describen ese motor; la calidad real se mide con perplejidad en `src/evaluation.py`. Recuerda
+> que hay **dos backends divergentes** (`main.py` y `simple_main.py`); ver [CLAUDE.md](CLAUDE.md).
+> Para el estado general del proyecto, ver el [README principal](README.md).
+
 ## 🎯 **Aplicación Web Profesional Creada**
 
-Se ha desarrollado una aplicación web completa y profesional para entrenar y evaluar el UltraEfficientLLM usando FastAPI y React.
+Se ha desarrollado una aplicación web completa para entrenar y evaluar el motor n-grama
+usando FastAPI y React.
 
 ---
 
