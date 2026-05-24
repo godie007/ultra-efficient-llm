@@ -16,11 +16,11 @@ def start_backend():
     os.chdir(backend_dir)
     
     try:
-        # Ejecutar el backend
+        # Ejecutar el backend (asistente RAG)
         process = subprocess.Popen([
-            sys.executable, "simple_main.py"
-        ], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        
+            sys.executable, "main.py"
+        ])
+
         print("✅ Backend iniciado en http://localhost:8000")
         return process
     except Exception as e:

@@ -1,11 +1,8 @@
-
 import { Routes, Route } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import Navbar from './components/Navbar';
-import Dashboard from './pages/Dashboard';
-import Training from './pages/Training';
-import Generation from './pages/Generation';
-import ModelStatus from './pages/ModelStatus';
+import Chat from './pages/Chat';
+import KnowledgeSources from './pages/KnowledgeSources';
 
 function App() {
   return (
@@ -13,13 +10,11 @@ function App() {
       <Navbar />
       <main className="container mx-auto">
         <Routes>
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/training" element={<Training />} />
-          <Route path="/generation" element={<Generation />} />
-          <Route path="/status" element={<ModelStatus />} />
+          <Route path="/" element={<Chat />} />
+          <Route path="/sources" element={<KnowledgeSources />} />
         </Routes>
       </main>
-      <Toaster 
+      <Toaster
         position="top-right"
         toastOptions={{
           duration: 4000,
@@ -37,4 +32,4 @@ function App() {
   );
 }
 
-export default App; 
+export default App;

@@ -1,5 +1,0 @@
-# Dependencias OPCIONALES para la arquitectura híbrida (Etapa 2).
-# El motor n-grama base no las necesita; instálalas solo para usar el backbone neuronal.
-# GPU (p. ej. RTX 4060 Ti): instala el build de torch con CUDA desde https://pytorch.org
-torch>=2.0
-transformers>=4.40

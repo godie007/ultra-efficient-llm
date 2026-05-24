@@ -86,6 +86,19 @@ class SemanticMemory:
         else:
             self._embeddings = torch.cat([self._embeddings, new_embeddings], dim=0)
 
+    def clear(self) -> None:
+        """Vacía la memoria conservando el modelo cargado."""
+        self.examples = []
+        self._embeddings = None
+
+    def set_documents(self, texts: List[str]) -> None:
+        """Reemplaza todo el contenido (reembebe desde cero, sin recargar el modelo).
+
+        Usado por el backend al editar o eliminar fuentes de conocimiento.
+        """
+        self.clear()
+        self.add(texts)
+
     def retrieve(self, query: str, top_k: int = 3) -> List[Tuple[str, float]]:
         """Devuelve los `top_k` ejemplos más similares a `query` (coseno descendente)."""
         if self._embeddings is None or not self.examples:

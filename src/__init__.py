@@ -1,17 +1,8 @@
 """
-UltraEfficientLLM - Modelo de Lenguaje Ultra-Eficiente
+Asistente RAG: recuperación semántica + generación neuronal sobre fuentes de conocimiento.
+
+Módulos: semantic_memory (recuperación), neural_backbone (generación), rag (orquestación),
+quality (validación). Se importan directamente para no cargar torch al importar el paquete.
 """
 
-from .ultra_efficient_llm import UltraEfficientLLM
-from .data_processor import DataProcessor
-from .utils import setup_logging, get_efficiency_metrics
-
-__version__ = "1.0.0"
-__author__ = "UltraEfficientLLM Team"
-
-__all__ = [
-    "UltraEfficientLLM",
-    "DataProcessor", 
-    "setup_logging",
-    "get_efficiency_metrics"
-] 
+__version__ = "2.0.0"

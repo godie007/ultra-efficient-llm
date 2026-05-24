@@ -1,3 +1,7 @@
-requests>=2.25.0
-numpy>=1.20.0
-typing-extensions>=3.7.0 
+# Asistente RAG: backend FastAPI + recuperación semántica (embeddings) + generación neuronal.
+fastapi>=0.115
+uvicorn[standard]>=0.24
+python-multipart>=0.0.6
+transformers>=4.40
+# Para GPU (p. ej. RTX 4060 Ti) instala el build de torch con CUDA desde https://pytorch.org
+torch>=2.0
