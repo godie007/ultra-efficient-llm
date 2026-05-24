@@ -1,0 +1,55 @@
+{
+  "description": "Conjunto de evaluación de calidad. Las preguntas usan vocabulario distinto al de los documentos (para medir recuperación semántica, no léxica). relevant_ids son los documentos correctos de knowledge_base.json.",
+  "cases": [
+    {
+      "question": "How can I adapt a big pretrained model to my own field without retraining all of its weights?",
+      "reference_answer": "Use LoRA (Low-Rank Adaptation): freeze the pretrained weights and train small low-rank adapters. It adapts the model by updating under 1% of its parameters, so it fits on a single consumer GPU.",
+      "relevant_ids": ["train-lora", "train-transfer"]
+    },
+    {
+      "question": "Which number tells me how good a language model is at predicting text?",
+      "reference_answer": "Perplexity. It is the exponential of the average negative log-likelihood per token; lower perplexity means the model predicts real continuations better.",
+      "relevant_ids": ["eval-perplexity"]
+    },
+    {
+      "question": "My model scores great on the data I trained it with but fails on fresh inputs. Why?",
+      "reference_answer": "That is overfitting: the model memorized the training data instead of learning general patterns. Use regularization, dropout, more data, and watch validation loss with early stopping.",
+      "relevant_ids": ["train-overfitting", "eval-val-loss"]
+    },
+    {
+      "question": "How do computers grasp that two words mean similar things?",
+      "reference_answer": "Through embeddings: words and sentences are mapped to dense vectors where similar meanings are close together, so the model can compare texts by meaning rather than exact words.",
+      "relevant_ids": ["nlp-embeddings"]
+    },
+    {
+      "question": "How can I get a model to answer using my own private documents?",
+      "reference_answer": "Use retrieval-augmented generation (RAG): retrieve the relevant documents from a memory and pass them to the model as context, so it answers from your knowledge without retraining.",
+      "relevant_ids": ["nlp-rag"]
+    },
+    {
+      "question": "What techniques make a trained model smaller and faster to serve?",
+      "reference_answer": "Quantization (store weights at lower precision) and knowledge distillation (train a small student to imitate a large teacher) shrink the model and speed up inference with little quality loss.",
+      "relevant_ids": ["deploy-quantization", "deploy-distillation"]
+    },
+    {
+      "question": "What mechanism lets modern language models connect distant parts of a sentence?",
+      "reference_answer": "Self-attention in transformers: every token attends to every other token, capturing long-range dependencies that recurrent models struggled with.",
+      "relevant_ids": ["nlp-attention"]
+    },
+    {
+      "question": "Should I always just collect as much data as possible?",
+      "reference_answer": "Not necessarily. Data quality usually matters more than quantity: a smaller set of clean, relevant, well-labeled examples often beats a larger noisy one and trains faster.",
+      "relevant_ids": ["data-quality", "data-labeling"]
+    },
+    {
+      "question": "Can a model learn a new task from just a couple of examples shown to it?",
+      "reference_answer": "Yes, via few-shot or in-context learning: a pretrained model infers the task from a few examples placed in the prompt, with no weight updates.",
+      "relevant_ids": ["nlp-fewshot"]
+    },
+    {
+      "question": "What kind of hardware makes neural network inference run fast?",
+      "reference_answer": "GPUs, because they run the underlying matrix multiplications in massively parallel fashion, making them far faster than CPUs for neural network workloads.",
+      "relevant_ids": ["deploy-gpu"]
+    }
+  ]
+}

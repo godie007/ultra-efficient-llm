@@ -37,6 +37,22 @@ Infini-gram (2024): interpolar n-gramas con un LM neuronal reduce la perplejidad
 recuperación semántica conecta consultas con ejemplos relevantes **sin solapamiento léxico**
 (p. ej. "How do machines learn?" → ejemplos de redes neuronales).
 
+### Validación de calidad (asistente RAG)
+
+Sobre un corpus profesional (`data/corpus/`) y su set de evaluación, midiendo recuperación y
+calidad de respuesta (similitud semántica vs respuesta de referencia):
+
+| Métrica | distilgpt2 | Qwen2.5-0.5B-Instruct |
+|---|---|---|
+| Recuperación — hit rate | 1.00 | 1.00 |
+| Recuperación — recall@3 | 0.80 | 0.80 |
+| Respuestas — similitud media | 0.41 | **0.59** |
+| Respuestas — tasa de aprobados | 30 % | **80 %** |
+
+La recuperación (la parte de "conectar conceptos") es sólida e independiente del modelo. La
+calidad de respuesta sube mucho con un modelo instruido pequeño — todo **con 24 documentos y
+sin entrenar**. Las respuestas con Qwen son profesionales y coherentes.
+
 📐 Para el detalle técnico de cómo funciona y se conecta cada capa, ver
 **[docs/ARQUITECTURA.md](docs/ARQUITECTURA.md)**.
 
@@ -67,6 +83,11 @@ PYTHONUTF8=1 python src/evaluation.py
 # Demo de recuperación semántica + generación few-shot (RAG)
 PYTHONUTF8=1 python src/rag.py
 
+# Validación de calidad sobre el corpus profesional (recuperación + calidad de respuesta)
+PYTHONUTF8=1 python src/quality.py
+# Calidad profesional con un modelo instruido pequeño (se descarga la primera vez):
+RAG_MODEL=Qwen/Qwen2.5-0.5B-Instruct PYTHONUTF8=1 python src/quality.py
+
 # Demos del motor n-grama
 python main.py                 # demo con libro (descarga Frankenstein)
 python main.py --basic         # demo con textos de ejemplo
@@ -90,15 +111,28 @@ cd web_app/frontend && npm install && npm run dev   # http://localhost:5173
 | `src/hybrid.py` | `HybridLLM`: interpola n-grama + neuronal. |
 | `src/semantic_memory.py` | Memoria de ejemplos por embeddings (all-MiniLM-L6-v2) + recuperación por coseno. |
 | `src/rag.py` | `RAGGenerator`: recupera ejemplos relevantes y genera condicionado a ellos. |
+| `src/quality.py` | Validación de calidad: recuperación (precision/recall/MRR) y respuesta (similitud vs referencia). |
+| `data/corpus/` | Corpus profesional (`knowledge_base.json`) y set de evaluación (`qa_eval.json`). |
 | `src/data_processor.py`, `src/utils.py` | Descarga/limpieza de corpus y utilidades. |
 | `web_app/` | API FastAPI + frontend React sobre el motor n-grama. |
 
+## Modelo de generación configurable
+
+El backbone neuronal se elige con la variable `RAG_MODEL` (por defecto `distilgpt2`, ligero).
+Para calidad profesional, usa un modelo instruido pequeño que corre en una GPU de consumo:
+
+```bash
+RAG_MODEL=Qwen/Qwen2.5-0.5B-Instruct PYTHONUTF8=1 python src/quality.py
+```
+
+Los modelos instruidos (nombre con `instruct`/`chat`/`-it`) se detectan automáticamente y usan
+su plantilla de chat.
+
 ## Próximos pasos
 
-- Cambiar el modelo base (distilgpt2) por un modelo instruido pequeño (Qwen2.5-0.5B, Gemma)
-  para mejorar mucho la coherencia del *few-shot*.
 - LoRA para adaptación a dominio en GPU (eficiencia de entrenamiento).
-- Benchmark con corpus real y conjuntos de validación más grandes.
+- Ampliar el corpus y el set de evaluación; benchmark con dominios adicionales.
+- Probar modelos instruidos algo mayores (Qwen2.5-1.5B, Gemma) según el presupuesto de GPU.
 
 ## Licencia
 

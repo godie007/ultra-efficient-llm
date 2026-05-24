@@ -15,29 +15,41 @@ quitar ejemplos (cero reentrenamiento), que es la eficiencia en datos buscada.
 from typing import List, Tuple
 
 
+# System prompt para respuestas de calidad profesional, ancladas al conocimiento recuperado.
+DEFAULT_SYSTEM_PROMPT = (
+    "You are a professional technical assistant. Answer the question using ONLY the provided "
+    "knowledge. Be concise, accurate and professional. If the knowledge does not cover the "
+    "question, say so instead of inventing an answer."
+)
+
+
 class RAGGenerator:
     """Recupera ejemplos relevantes y genera condicionado a ellos."""
 
-    def __init__(self, memory, backbone, top_k: int = 3):
+    def __init__(self, memory, backbone, top_k: int = 3,
+                 system_prompt: str = DEFAULT_SYSTEM_PROMPT):
         self.memory = memory
         self.backbone = backbone
         self.top_k = top_k
+        self.system_prompt = system_prompt
 
     def build_prompt(self, query: str, retrieved: List[Tuple[str, float]]) -> str:
         """Construye un prompt few-shot con los ejemplos recuperados como contexto."""
         context = "\n".join(f"- {example}" for example, _score in retrieved)
         return (
-            "Conocimiento relevante:\n"
+            "Knowledge:\n"
             f"{context}\n\n"
-            f"Pregunta: {query}\n"
-            "Respuesta:"
+            f"Question: {query}\n"
+            "Answer:"
         )
 
-    def generate(self, query: str, max_new_tokens: int = 40, temperature: float = 0.7):
+    def generate(self, query: str, max_new_tokens: int = 80, temperature: float = 0.7):
         """Devuelve (respuesta_generada, ejemplos_recuperados)."""
         retrieved = self.memory.retrieve(query, self.top_k)
         prompt = self.build_prompt(query, retrieved)
-        answer = self.backbone.generate_text(prompt, max_new_tokens, temperature)
+        answer = self.backbone.generate_text(
+            prompt, max_new_tokens, temperature, system=self.system_prompt
+        )
         return answer, retrieved
 
 

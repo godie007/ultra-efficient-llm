@@ -18,6 +18,7 @@ from neural_backbone import NeuralBackbone
 from hybrid import HybridLLM
 from semantic_memory import SemanticMemory
 from rag import RAGGenerator
+from quality import load_corpus, load_eval, evaluate_retrieval, evaluate_answers
 
 
 class TestUltraEfficientLLM(unittest.TestCase):
@@ -270,6 +271,39 @@ class TestSemanticMemory(unittest.TestCase):
         self.assertEqual(empty.retrieve("cualquier cosa"), [])
 
 
+@unittest.skipUnless(
+    SemanticMemory.available() and os.environ.get("RUN_NEURAL_TESTS"),
+    "Tests neuronales desactivados (define RUN_NEURAL_TESTS=1 con torch/transformers)"
+)
+class TestQuality(unittest.TestCase):
+    """Validación de calidad sobre el corpus profesional (opt-in)"""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.documents = load_corpus()
+        cls.cases = load_eval()
+        cls.id_by_text = {doc["text"]: doc["id"] for doc in cls.documents}
+        cls.memory = SemanticMemory()
+        cls.memory.add([doc["text"] for doc in cls.documents])
+
+    def test_retrieval_quality(self):
+        """La recuperación semántica debe traer los documentos correctos"""
+        result = evaluate_retrieval(self.memory, self.id_by_text, self.cases, top_k=3)
+        self.assertGreaterEqual(result["hit_rate"], 0.8)
+        self.assertGreaterEqual(result["recall_at_k"], 0.6)
+
+    def test_answer_evaluation_runs(self):
+        """El arnés de calidad de respuestas produce métricas válidas"""
+        backbone = NeuralBackbone("distilgpt2")
+        rag = RAGGenerator(self.memory, backbone, top_k=2)
+        result = evaluate_answers(
+            rag, self.memory, self.cases[:2], threshold=0.5, max_new_tokens=30
+        )
+        self.assertEqual(result["num_cases"], 2)
+        self.assertTrue(-1.0 <= result["mean_similarity"] <= 1.0)
+        self.assertTrue(0.0 <= result["pass_rate"] <= 1.0)
+
+
 def run_tests():
     """Ejecuta todos los tests"""
     print("🧪 Ejecutando tests para UltraEfficientLLM...")
@@ -285,6 +319,7 @@ def run_tests():
     test_suite.addTests(loader.loadTestsFromTestCase(TestEvaluation))
     test_suite.addTests(loader.loadTestsFromTestCase(TestHybrid))
     test_suite.addTests(loader.loadTestsFromTestCase(TestSemanticMemory))
+    test_suite.addTests(loader.loadTestsFromTestCase(TestQuality))
     
     # Ejecutar tests
     runner = unittest.TextTestRunner(verbosity=2)

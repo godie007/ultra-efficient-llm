@@ -102,10 +102,17 @@ Materializa "dar ejemplos y conectar conceptos con pocos datos".
 
 ### `RAGGenerator`
 1. `retrieve` los ejemplos relevantes a la consulta.
-2. `build_prompt` arma un prompt few-shot (`Conocimiento relevante: … / Pregunta: … / Respuesta:`).
+2. `build_prompt` arma un prompt few-shot (`Knowledge: … / Question: … / Answer:`) con un
+   system prompt profesional que pide responder solo con el conocimiento dado.
 3. `backbone.generate_text` genera condicionado a esos ejemplos.
 
 El conocimiento vive en la memoria, no en los pesos: añadir/quitar ejemplos no requiere reentrenar.
+
+### Modelo de generación (calidad profesional)
+`NeuralBackbone` autodetecta modelos instruidos (nombre con `instruct`/`chat`/`-it`) y usa su
+plantilla de chat, lo que mejora mucho la calidad. Se elige con la variable de entorno `RAG_MODEL`
+(por defecto `distilgpt2`; `Qwen/Qwen2.5-0.5B-Instruct` para respuestas profesionales en GPU de
+consumo).
 
 ---
 
@@ -133,6 +140,18 @@ consulta → SemanticMemory.retrieve → ejemplos → build_prompt → NeuralBac
   neuronal e híbrido (una pasada neuronal por posición).
 
 La **calidad** se mide con perplejidad, no con memoria ni "sparsity".
+
+## Validación de calidad (`src/quality.py`, `data/corpus/`)
+
+Sobre un corpus profesional (`knowledge_base.json`) y su set de evaluación (`qa_eval.json`, con
+preguntas redactadas distinto a los documentos):
+- `evaluate_retrieval` — precision@k, recall@k, hit rate y MRR: ¿la memoria trae los documentos
+  correctos? Determinista, independiente del modelo de generación.
+- `evaluate_answers` — similitud coseno entre la respuesta generada y una respuesta de referencia
+  profesional (embeddings de MiniLM), con tasa de aprobados sobre un umbral.
+
+La recuperación valida "conectar conceptos"; la similitud de respuesta es un proxy automatizable
+de "calidad profesional". Esta última depende del modelo (`RAG_MODEL`).
 
 ---
 

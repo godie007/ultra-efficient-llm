@@ -1,0 +1,30 @@
+{
+  "domain": "machine learning, NLP and software engineering",
+  "description": "Base de conocimiento profesional para el asistente RAG. Cada documento es un concepto único y autocontenido.",
+  "documents": [
+    {"id": "train-grad-descent", "text": "Gradient descent trains a model by repeatedly adjusting its weights in the direction that reduces the loss. Backpropagation computes the gradient of the loss with respect to each weight so the update can be applied efficiently."},
+    {"id": "train-overfitting", "text": "Overfitting happens when a model memorizes the training data instead of learning general patterns, so it performs well on training examples but poorly on new ones. Regularization, dropout and more data reduce overfitting."},
+    {"id": "train-learning-rate", "text": "The learning rate controls how large each weight update is during training. Too high and training diverges; too low and it converges very slowly. It is one of the most important hyperparameters to tune."},
+    {"id": "train-batch-size", "text": "Stochastic gradient descent updates weights using small batches of examples rather than the full dataset. Batch size trades off gradient noise, training speed and memory usage."},
+    {"id": "train-transfer", "text": "Transfer learning reuses a model pretrained on a large general corpus and adapts it to a specific task with a small amount of additional data, instead of training from scratch."},
+    {"id": "train-lora", "text": "LoRA (Low-Rank Adaptation) is a parameter-efficient fine-tuning method that freezes the pretrained weights and trains small low-rank adapter matrices. It adapts a large model to a domain by training under 1% of its parameters, so it fits on a single consumer GPU."},
+    {"id": "eval-perplexity", "text": "Perplexity measures how well a language model predicts text: it is the exponential of the average negative log-likelihood per token. Lower perplexity means the model assigns higher probability to the real continuations, so it is a core quality metric for language models."},
+    {"id": "eval-held-out", "text": "A model should be evaluated on held-out data it did not see during training. In-sample scores mainly reflect memorization; only held-out performance reveals whether the model generalizes."},
+    {"id": "eval-val-loss", "text": "When training loss keeps dropping but validation loss starts rising, the model is beginning to overfit. Early stopping halts training at the point of lowest validation loss."},
+    {"id": "eval-classification", "text": "For classification, precision is the fraction of predicted positives that are correct, recall is the fraction of actual positives that are found, and F1 is their harmonic mean. Accuracy alone is misleading on imbalanced datasets."},
+    {"id": "nlp-embeddings", "text": "Embeddings represent words or sentences as dense vectors so that items with similar meaning lie close together in vector space. This lets models capture semantic relationships and compare texts that share meaning but not words."},
+    {"id": "nlp-attention", "text": "Transformers use self-attention to let every token attend to every other token in the sequence, which captures long-range dependencies that earlier recurrent models struggled with."},
+    {"id": "nlp-tokenization", "text": "Tokenization splits text into units the model processes. Subword schemes like BPE break rare words into smaller pieces, balancing vocabulary size against the ability to represent any word."},
+    {"id": "nlp-rag", "text": "Retrieval-augmented generation (RAG) retrieves relevant documents from an external memory and gives them to a language model as context, so the model answers using up-to-date or private knowledge without retraining its weights."},
+    {"id": "nlp-context-window", "text": "The context window is the maximum number of tokens a model can attend to at once. Information outside the window is invisible to the model, which limits how much retrieved context can be supplied."},
+    {"id": "nlp-fewshot", "text": "Few-shot or in-context learning lets a pretrained model perform a task from a handful of examples placed directly in the prompt, with no weight updates. The model infers the pattern from the provided examples."},
+    {"id": "data-quality", "text": "Data quality usually matters more than raw quantity. A smaller set of clean, relevant, well-labeled examples often trains a better model than a much larger noisy one, and it trains faster and cheaper."},
+    {"id": "data-augmentation", "text": "Data augmentation creates new training examples by transforming existing ones (paraphrasing, noise, back-translation), increasing diversity without collecting new data and improving robustness."},
+    {"id": "data-labeling", "text": "Consistent labeling is critical: ambiguous or conflicting labels cap how well any model can do. Clear annotation guidelines and inter-annotator agreement checks improve label quality."},
+    {"id": "deploy-quantization", "text": "Quantization stores model weights at lower precision (for example 8-bit or even 1.58-bit), shrinking memory use and speeding up inference on CPUs and GPUs with little loss in quality."},
+    {"id": "deploy-distillation", "text": "Knowledge distillation trains a small student model to imitate a larger teacher model, producing a compact model that keeps much of the teacher's quality but is far cheaper to run."},
+    {"id": "deploy-latency", "text": "Inference latency can be reduced by batching requests, caching key-value attention states, and using smaller or quantized models. Throughput and per-request latency are often in tension."},
+    {"id": "deploy-gpu", "text": "GPUs accelerate neural network inference and training because they perform the underlying matrix multiplications in massively parallel fashion, making them far faster than CPUs for these workloads."},
+    {"id": "deploy-moe", "text": "Mixture of Experts (MoE) routes each input through only a few specialized sub-networks (experts) instead of the whole model, so the active compute per token stays small even as total capacity grows."}
+  ]
+}

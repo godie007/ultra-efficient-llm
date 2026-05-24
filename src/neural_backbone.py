@@ -31,7 +31,8 @@ def _deps_available() -> bool:
 class NeuralBackbone:
     """Envuelve un LM causal pequeño y expone la distribución del siguiente token."""
 
-    def __init__(self, model_name: str = "distilgpt2", device: Optional[str] = None):
+    def __init__(self, model_name: str = "distilgpt2", device: Optional[str] = None,
+                 instruct: Optional[bool] = None):
         if not _deps_available():
             raise ImportError(
                 "torch/transformers no disponibles. Instala con: "
@@ -48,6 +49,16 @@ class NeuralBackbone:
         self.model = AutoModelForCausalLM.from_pretrained(model_name)
         self.model.to(self.device)
         self.model.eval()
+
+        if self.tokenizer.pad_token_id is None:
+            self.tokenizer.pad_token = self.tokenizer.eos_token
+
+        # Modelos instruidos (Qwen-Instruct, Gemma-it, etc.) generan respuestas de mayor
+        # calidad usando su plantilla de chat. Se autodetecta por el nombre si no se indica.
+        if instruct is None:
+            name = model_name.lower()
+            instruct = ("instruct" in name or "chat" in name or "-it" in name)
+        self.instruct = instruct and getattr(self.tokenizer, "chat_template", None) is not None
 
     @staticmethod
     def available() -> bool:
@@ -94,22 +105,39 @@ class NeuralBackbone:
         return words
 
     def generate_text(self, prompt: str, max_new_tokens: int = 40,
-                      temperature: float = 0.7) -> str:
-        """Genera una continuación libre para `prompt` (solo los tokens nuevos).
+                      temperature: float = 0.7,
+                      system: Optional[str] = None) -> str:
+        """Genera una respuesta para `prompt` (solo los tokens nuevos).
 
-        Usado por el generador RAG: el prompt incluye los ejemplos recuperados, y el
-        modelo genera condicionado a ellos ("conectar conceptos" a partir de ejemplos).
+        Usado por el generador RAG: el prompt incluye los ejemplos recuperados y el modelo
+        genera condicionado a ellos. Si el modelo es instruido, usa su plantilla de chat
+        (mejor calidad); si no, genera como continuación libre.
         """
         torch = self._torch
-        inputs = self.tokenizer(prompt, return_tensors="pt").to(self.device)
+
+        if self.instruct:
+            messages = []
+            if system:
+                messages.append({"role": "system", "content": system})
+            messages.append({"role": "user", "content": prompt})
+            input_ids = self.tokenizer.apply_chat_template(
+                messages, add_generation_prompt=True, return_tensors="pt"
+            ).to(self.device)
+            attention_mask = torch.ones_like(input_ids)
+        else:
+            encoded = self.tokenizer(prompt, return_tensors="pt").to(self.device)
+            input_ids = encoded["input_ids"]
+            attention_mask = encoded["attention_mask"]
+
         with torch.no_grad():
             output = self.model.generate(
-                **inputs,
+                input_ids=input_ids,
+                attention_mask=attention_mask,
                 max_new_tokens=max_new_tokens,
                 do_sample=True,
                 temperature=temperature,
                 top_p=0.95,
-                pad_token_id=self.tokenizer.eos_token_id,
+                pad_token_id=self.tokenizer.pad_token_id,
             )
-        new_tokens = output[0][inputs["input_ids"].shape[1]:]
+        new_tokens = output[0][input_ids.shape[1]:]
         return self.tokenizer.decode(new_tokens, skip_special_tokens=True).strip()
