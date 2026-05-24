@@ -4,6 +4,9 @@ Documentación técnica del proyecto.
 
 ## Archivos
 
+- **ARQUITECTURA.md** — documentación técnica de la arquitectura: las tres capas (motor n-grama,
+  híbrido neuronal, recuperación semántica/RAG), flujos de datos y decisiones de diseño. **Punto
+  de partida recomendado.**
 - **llm_reasoning_explanation.md** — explicación de los 4 pasos del **motor n-grama**
   (extracción → índice → activación/backoff → predicción). ⚠️ Documento histórico:
   conserva el encuadre original ("razonamiento", comparaciones con GPT) que ya no es

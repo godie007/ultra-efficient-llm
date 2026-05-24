@@ -37,6 +37,9 @@ Infini-gram (2024): interpolar n-gramas con un LM neuronal reduce la perplejidad
 recuperación semántica conecta consultas con ejemplos relevantes **sin solapamiento léxico**
 (p. ej. "How do machines learn?" → ejemplos de redes neuronales).
 
+📐 Para el detalle técnico de cómo funciona y se conecta cada capa, ver
+**[docs/ARQUITECTURA.md](docs/ARQUITECTURA.md)**.
+
 ## Instalación
 
 ```bash
